@@ -1,4 +1,4 @@
-package com.github.vitorpamplona.intellijcql
+package org.pathcheck.intellij.cql
 
 import com.intellij.ide.highlighter.XmlFileType
 import com.intellij.psi.xml.XmlFile

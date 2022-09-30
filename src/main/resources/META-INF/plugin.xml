@@ -1,18 +1,26 @@
 <!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
 <idea-plugin>
-    <id>com.github.vitorpamplona.intellijcql</id>
-    <name>intellij-cql</name>
-    <vendor>vitorpamplona</vendor>
+    <id>org.pathcheck.intellij.cql</id>
+    <name>Clinical Quality Language</name>
+    <vendor>Vitor Pamplona</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
-        <applicationService serviceImplementation="com.github.vitorpamplona.intellijcql.services.MyApplicationService"/>
-        <projectService serviceImplementation="com.github.vitorpamplona.intellijcql.services.MyProjectService"/>
+        <fileType
+                name="CQL File"
+                implementationClass="org.pathcheck.intellij.cql.CqlFileType"
+                fieldName="INSTANCE"
+                language="Cql"
+                extensions="cql"/>
+        <lang.syntaxHighlighterFactory
+                language="Cql"
+                implementationClass="org.pathcheck.intellij.cql.CqlSyntaxHighlighterFactory"/>
+
+        <lang.parserDefinition language="Cql" implementationClass="org.pathcheck.intellij.cql.CqlParserDefinition"/>
+
     </extensions>
 
     <applicationListeners>
-        <listener class="com.github.vitorpamplona.intellijcql.listeners.MyProjectManagerListener"
-                  topic="com.intellij.openapi.project.ProjectManagerListener"/>
     </applicationListeners>
 </idea-plugin>

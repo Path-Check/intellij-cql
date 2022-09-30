@@ -1,4 +1,4 @@
-package com.github.vitorpamplona.intellijcql
+package org.pathcheck.intellij.cql
 
 import com.intellij.DynamicBundle
 import org.jetbrains.annotations.NonNls
