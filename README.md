@@ -1,4 +1,4 @@
-# intellij-cql
+# Clinical Quality Language Plugin for IntelliJ Idea and Android Studio
 
 ![Build](https://github.com/Path-Check/intellij-cql/workflows/Build/badge.svg)
 [![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)

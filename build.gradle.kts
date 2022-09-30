@@ -13,8 +13,6 @@ plugins {
     id("org.jetbrains.changelog") version "1.3.1"
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
-
-    id("antlr")
 }
 
 group = properties("pluginGroup")
@@ -26,7 +24,7 @@ repositories {
 }
 
 dependencies {
-    antlr("org.antlr:antlr4:4.11.1")
+    implementation("info.cqframework:cql:2.2.0")
     implementation("org.antlr:antlr4-intellij-adaptor:0.1")
 }
 
@@ -61,25 +59,7 @@ qodana {
     showReport.set(System.getenv("QODANA_SHOW_REPORT")?.toBoolean() ?: false)
 }
 
-// run generate task before build
-// not required if you add the generated sources to version control
-// you can call the task manually in this case to update the generated sources
-tasks.getByName("compileKotlin").dependsOn("generateGrammarSource")
-
-sourceSets {
-    getByName("main").java.srcDir("generated-src/antlr/main")
-}
-
 tasks {
-    generateGrammarSource {
-        maxHeapSize = "64m"
-        arguments = arguments + listOf(
-            "-package", "org.pathcheck.intellij.cql.parser",
-            "-lib", "src/main/antlr/org/pathcheck/intellij/cql/parser",
-            "-Xexact-output-dir")
-        outputDirectory = file("generated-src/antlr/main/org/pathcheck/intellij/cql/parser/")
-    }
-
     wrapper {
         gradleVersion = properties("gradleVersion")
     }

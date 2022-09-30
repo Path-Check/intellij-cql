@@ -8,8 +8,8 @@ import com.intellij.psi.tree.IElementType
 import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory
 import org.antlr.intellij.adaptor.lexer.TokenIElementType
-import org.pathcheck.intellij.cql.parser.cqlLexer
-import org.pathcheck.intellij.cql.parser.cqlParser
+import org.cqframework.cql.gen.cqlLexer
+import org.cqframework.cql.gen.cqlParser
 
 /** A highlighter is really just a mapping from token type to
  * some text attributes using [.getTokenHighlights].

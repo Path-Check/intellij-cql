@@ -19,8 +19,8 @@ import org.antlr.intellij.adaptor.parser.ANTLRParserAdaptor
 import org.antlr.intellij.adaptor.psi.ANTLRPsiNode
 import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.tree.ParseTree
-import org.pathcheck.intellij.cql.parser.cqlLexer
-import org.pathcheck.intellij.cql.parser.cqlParser
+import org.cqframework.cql.gen.cqlLexer
+import org.cqframework.cql.gen.cqlParser
 
 class CqlParserDefinition : ParserDefinition {
     override fun createLexer(project: Project): Lexer {
