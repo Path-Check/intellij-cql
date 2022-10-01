@@ -2,7 +2,7 @@
 <idea-plugin>
     <id>org.pathcheck.intellij.cql</id>
     <name>Clinical Quality Language</name>
-    <vendor>Vitor Pamplona</vendor>
+    <vendor>PathCheck</vendor>
 
     <depends>com.intellij.modules.platform</depends>
 
