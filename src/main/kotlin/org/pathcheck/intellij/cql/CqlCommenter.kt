@@ -57,7 +57,7 @@ class CqlCommenter : CodeDocumentationAwareCommenter {
         return "*/"
     }
 
-    override fun isDocumentationComment(element: PsiComment): Boolean {
+    override fun isDocumentationComment(element: PsiComment?): Boolean {
         return element != null && element.tokenType === documentationCommentTokenType
     }
 }

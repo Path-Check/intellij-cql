@@ -30,7 +30,7 @@ class CqlParserDefinition : ParserDefinition {
     override fun createParser(project: Project): PsiParser {
         val parser = cqlParser(null)
         return object : ANTLRParserAdaptor(CqlLanguage, parser) {
-            override fun parse(parser: Parser, root: IElementType): ParseTree {
+            override fun parse(parser: Parser, root: IElementType?): ParseTree {
                 // start rule depends on root passed in; sometimes we want to create an ID node etc...
                 if (root is IFileElementType) {
                     return (parser as cqlParser).library()
