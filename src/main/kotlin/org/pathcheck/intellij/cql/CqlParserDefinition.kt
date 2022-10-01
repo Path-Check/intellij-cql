@@ -43,15 +43,15 @@ class CqlParserDefinition : ParserDefinition {
 
     /** "Tokens of those types are automatically skipped by PsiBuilder."  */
     override fun getWhitespaceTokens(): TokenSet {
-        return WHITESPACE
+        return CqlTokenTypes.WHITESPACES
     }
 
     override fun getCommentTokens(): TokenSet {
-        return COMMENTS
+        return CqlTokenTypes.COMMENTS
     }
 
     override fun getStringLiteralElements(): TokenSet {
-        return STRING
+        return CqlTokenTypes.STRINGS
     }
 
     /** What is the IFileElementType of the root parse tree node? It
@@ -110,30 +110,5 @@ class CqlParserDefinition : ParserDefinition {
 
     companion object {
         val FILE = IFileElementType(CqlLanguage)
-        var ID: TokenIElementType? = null
-
-        init {
-            PSIElementTypeFactory.defineLanguageIElementTypes(
-                CqlLanguage,
-                cqlParser.tokenNames,
-                cqlParser.ruleNames
-            )
-            val tokenIElementTypes = PSIElementTypeFactory.getTokenIElementTypes(CqlLanguage)
-            ID = tokenIElementTypes.get(cqlLexer.IDENTIFIER)
-        }
-
-        val COMMENTS = PSIElementTypeFactory.createTokenSet(
-            CqlLanguage,
-            cqlLexer.COMMENT,
-            cqlLexer.LINE_COMMENT
-        )!!
-        val WHITESPACE = PSIElementTypeFactory.createTokenSet(
-            CqlLanguage,
-            cqlLexer.WS
-        )!!
-        val STRING = PSIElementTypeFactory.createTokenSet(
-            CqlLanguage,
-            cqlLexer.STRING
-        )!!
     }
 }

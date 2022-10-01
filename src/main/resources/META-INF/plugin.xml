@@ -13,6 +13,7 @@
                 fieldName="INSTANCE"
                 language="Cql"
                 extensions="cql"/>
+
         <lang.syntaxHighlighterFactory
                 language="Cql"
                 implementationClass="org.pathcheck.intellij.cql.CqlSyntaxHighlighterFactory"/>
@@ -21,6 +22,9 @@
 
         <colorSettingsPage
                 implementation="org.pathcheck.intellij.cql.CqlColorSettingsPage"/>
+
+        <lang.commenter language="Cql" implementationClass="org.pathcheck.intellij.cql.CqlCommenter" />
+
     </extensions>
 
     <applicationListeners>
