@@ -19,6 +19,8 @@
 
         <lang.parserDefinition language="Cql" implementationClass="org.pathcheck.intellij.cql.CqlParserDefinition"/>
 
+        <colorSettingsPage
+                implementation="org.pathcheck.intellij.cql.CqlColorSettingsPage"/>
     </extensions>
 
     <applicationListeners>
