@@ -33,10 +33,11 @@ class CqlParserDefinition : ParserDefinition {
         return object : ANTLRParserAdaptor(CqlLanguage, parser) {
             override fun parse(parser: Parser, root: IElementType): ParseTree {
                 // start rule depends on root passed in; sometimes we want to create an ID node etc...
-                return if (root is IFileElementType) {
-                    (parser as cqlParser).definition()
-                } else (parser as cqlParser).identifierOrFunctionIdentifier()
-                // let's hope it's an ID as needed by "rename function"
+                if (root is IFileElementType) {
+                    return (parser as cqlParser).library()
+                }
+
+                throw UnsupportedOperationException("Can't parse ${root?.javaClass?.name}")
             }
         }
     }
