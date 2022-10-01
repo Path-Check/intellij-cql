@@ -25,6 +25,10 @@
 
         <lang.commenter language="Cql" implementationClass="org.pathcheck.intellij.cql.CqlCommenter" />
 
+        <externalAnnotator
+                language="Cql"
+                implementationClass="org.pathcheck.intellij.cql.CqlExternalAnnotator"/>
+
     </extensions>
 
     <applicationListeners>

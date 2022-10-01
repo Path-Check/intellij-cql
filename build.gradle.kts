@@ -25,6 +25,21 @@ repositories {
 
 dependencies {
     implementation("info.cqframework:cql:2.2.0")
+    implementation("info.cqframework:model:2.2.0")
+    implementation("info.cqframework:elm:2.2.0")
+    implementation("info.cqframework:cql-to-elm:2.2.0") {
+        exclude(module = "xpp3")
+    }
+    implementation("info.cqframework:model-jackson:2.2.0")
+    implementation("info.cqframework:elm-jackson:2.2.0")
+
+    implementation("org.opencds.cqf.cql:engine:2.1.0")
+    implementation("org.opencds.cqf.cql:engine.jackson:2.1.0")
+
+    implementation("org.opencds.cqf.cql:evaluator:2.1.0")
+    implementation("org.opencds.cqf.cql:evaluator.fhir:2.1.0")
+    implementation("org.opencds.cqf.cql:evaluator.builder:2.1.0")
+
     implementation("org.antlr:antlr4-intellij-adaptor:0.1")
 }
 
