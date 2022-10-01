@@ -23,13 +23,15 @@ repositories {
     mavenCentral()
 }
 
+configurations.all {
+    exclude(group = "xpp3", module = "xpp3")
+}
+
 dependencies {
     implementation("info.cqframework:cql:2.2.0")
     implementation("info.cqframework:model:2.2.0")
     implementation("info.cqframework:elm:2.2.0")
-    implementation("info.cqframework:cql-to-elm:2.2.0") {
-        exclude(module = "xpp3")
-    }
+    implementation("info.cqframework:cql-to-elm:2.2.0")
     implementation("info.cqframework:model-jackson:2.2.0")
     implementation("info.cqframework:elm-jackson:2.2.0")
 
