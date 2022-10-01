@@ -1,8 +1,8 @@
 # Clinical Quality Language Plugin for IntelliJ Idea and Android Studio
 
 ![Build](https://github.com/Path-Check/intellij-cql/workflows/Build/badge.svg)
-[![Version](https://img.shields.io/jetbrains/plugin/v/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
-[![Downloads](https://img.shields.io/jetbrains/plugin/d/PLUGIN_ID.svg)](https://plugins.jetbrains.com/plugin/PLUGIN_ID)
+[![Version](https://img.shields.io/jetbrains/plugin/v/20063.svg)](https://plugins.jetbrains.com/plugin/20063)
+[![Downloads](https://img.shields.io/jetbrains/plugin/d/20063.svg)](https://plugins.jetbrains.com/plugin/20063)
 
 <!-- Plugin description -->
 Adds syntax highlighting, semantic (error) highlighting, and local execution for the HL7 Clinical Quality Language (CQL). 
