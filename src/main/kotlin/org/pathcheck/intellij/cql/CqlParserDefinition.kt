@@ -24,8 +24,7 @@ import org.cqframework.cql.gen.cqlParser
 
 class CqlParserDefinition : ParserDefinition {
     override fun createLexer(project: Project): Lexer {
-        val lexer = cqlLexer(null)
-        return ANTLRLexerAdaptor(CqlLanguage, lexer)
+        return ANTLRLexerAdaptor(CqlLanguage, cqlLexer(null))
     }
 
     override fun createParser(project: Project): PsiParser {
@@ -53,10 +52,6 @@ class CqlParserDefinition : ParserDefinition {
 
     override fun getStringLiteralElements(): TokenSet {
         return STRING
-    }
-
-    override fun spaceExistanceTypeBetweenTokens(left: ASTNode, right: ASTNode): ParserDefinition.SpaceRequirements {
-        return ParserDefinition.SpaceRequirements.MAY
     }
 
     /** What is the IFileElementType of the root parse tree node? It
@@ -131,14 +126,14 @@ class CqlParserDefinition : ParserDefinition {
             CqlLanguage,
             cqlLexer.COMMENT,
             cqlLexer.LINE_COMMENT
-        )
+        )!!
         val WHITESPACE = PSIElementTypeFactory.createTokenSet(
             CqlLanguage,
             cqlLexer.WS
-        )
+        )!!
         val STRING = PSIElementTypeFactory.createTokenSet(
             CqlLanguage,
             cqlLexer.STRING
-        )
+        )!!
     }
 }
