@@ -13,6 +13,9 @@ import org.cqframework.cql.elm.tracking.TrackBack
 import java.io.IOException
 
 class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerException>?>() {
+    private var modelManager: ModelManager? = null
+    private var libraryManager: LibraryManager? = null
+
     /** Called first; return file  */
     override fun collectInformation(file: PsiFile): PsiFile {
         return file
@@ -32,10 +35,13 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
         val pluginClassLoader = this.javaClass.classLoader
         try {
             currentThread.contextClassLoader = pluginClassLoader
-
-            val modelManager = ModelManager()
-            val libraryManager = LibraryManager(modelManager)
             return try {
+                // ModelManager and Library Manager must be created in this contxt to make sure ServiceLoaders are ready
+                if (modelManager == null)
+                    modelManager = ModelManager()
+                if (libraryManager == null)
+                    libraryManager = LibraryManager(modelManager)
+
                 val compiler = CqlCompiler(modelManager, libraryManager)
                 compiler.run(fileContents)
                 compiler.errors + compiler.warnings + compiler.messages
