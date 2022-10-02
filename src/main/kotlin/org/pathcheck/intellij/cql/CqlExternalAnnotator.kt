@@ -38,7 +38,7 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
             return try {
                 val compiler = CqlCompiler(modelManager, libraryManager)
                 compiler.run(fileContents)
-                compiler.errors
+                compiler.errors + compiler.warnings + compiler.messages
             } catch (e: IOException) {
                 e.printStackTrace()
                 throw RuntimeException(e)
