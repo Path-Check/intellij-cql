@@ -41,7 +41,10 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
 
                     val compiler = CqlCompiler(modelManager, libraryManager)
                     compiler.run(fileContents)
-                    compiler.errors + compiler.warnings + compiler.messages
+                    (compiler.errors + compiler.warnings + compiler.messages).filter {
+                        // Only returns annotations for the current file.
+                        it.locator.library.id == compiler.library.identifier.id
+                    }
                 } catch (e: IOException) {
                     e.printStackTrace()
                     throw RuntimeException(e)
