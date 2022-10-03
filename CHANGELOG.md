@@ -4,6 +4,13 @@
 
 ## [Unreleased]
 
+## [0.0.3]
+### Added
+- Adds a Code Completion for keywords in the language
+- Bugfix: Only shows errors in the current file. 
+- Imports <name>-<version>.cql files in the same directory
+- Adds warnings and messages from the CQL compiler as Annotations
+
 ## [0.0.2]
 ### Added
 - Fixes NullPointerExceptions in concurrent object creation
