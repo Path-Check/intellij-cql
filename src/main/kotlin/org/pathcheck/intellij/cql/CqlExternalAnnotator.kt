@@ -3,19 +3,15 @@ package org.pathcheck.intellij.cql
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.ExternalAnnotator
 import com.intellij.lang.annotation.HighlightSeverity
+import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
-import org.cqframework.cql.cql2elm.CqlCompiler
-import org.cqframework.cql.cql2elm.CqlCompilerException
-import org.cqframework.cql.cql2elm.LibraryManager
-import org.cqframework.cql.cql2elm.ModelManager
+import org.cqframework.cql.cql2elm.*
+import org.cqframework.cql.cql2elm.quick.FhirLibrarySourceProvider
 import org.cqframework.cql.elm.tracking.TrackBack
 import java.io.IOException
 
 class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerException>?>() {
-    private var modelManager: ModelManager? = null
-    private var libraryManager: LibraryManager? = null
-
     /** Called first; return file  */
     override fun collectInformation(file: PsiFile): PsiFile {
         return file
@@ -25,33 +21,35 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
     override fun doAnnotate(file: PsiFile?): List<CqlCompilerException>? {
         val fileContents = file!!.text
 
-        /*
-            Some libraries use ServiceLoader to detect and load implementations. For this to work in a plugin,
-            the context class loader must be set to the plugin's classloader and restored afterwards with the
-            original one around initialization code:
-         */
-        val currentThread = Thread.currentThread()
-        val originalClassLoader = currentThread.contextClassLoader
-        val pluginClassLoader = this.javaClass.classLoader
-        try {
-            currentThread.contextClassLoader = pluginClassLoader
-            return try {
-                // ModelManager and Library Manager must be created in this contxt to make sure ServiceLoaders are ready
-                if (modelManager == null)
-                    modelManager = ModelManager()
-                if (libraryManager == null)
-                    libraryManager = LibraryManager(modelManager)
+        return ApplicationManager.getApplication().runReadAction<List<CqlCompilerException>?> {
+            /*
+                Some libraries use ServiceLoader to detect and load implementations. For this to work in a plugin,
+                the context class loader must be set to the plugin's classloader and restored afterwards with the
+                original one around initialization code:
+             */
+            val currentThread = Thread.currentThread()
+            val originalClassLoader = currentThread.contextClassLoader
+            val pluginClassLoader = this.javaClass.classLoader
+            try {
+                currentThread.contextClassLoader = pluginClassLoader
+                try {
+                    // ModelManager and Library Manager must be created in this contxt to make sure ServiceLoaders are ready
+                    val modelManager = ModelManager()
+                    val libraryManager = LibraryManager(modelManager).apply {
+                        librarySourceLoader.registerProvider(PsiDirectoryLibrarySourceProvider(file.containingDirectory))
+                    }
 
-                val compiler = CqlCompiler(modelManager, libraryManager)
-                compiler.run(fileContents)
-                compiler.errors + compiler.warnings + compiler.messages
-            } catch (e: IOException) {
-                e.printStackTrace()
-                throw RuntimeException(e)
+                    val compiler = CqlCompiler(modelManager, libraryManager)
+                    compiler.run(fileContents)
+                    compiler.errors + compiler.warnings + compiler.messages
+                } catch (e: IOException) {
+                    e.printStackTrace()
+                    throw RuntimeException(e)
+                }
+
+            } finally {
+                currentThread.contextClassLoader = originalClassLoader
             }
-
-        } finally {
-            currentThread.contextClassLoader = originalClassLoader
         }
     }
 
