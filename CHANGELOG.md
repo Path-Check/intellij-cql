@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [0.0.4]
+### Added
+- Filename check (<libraryName>-<version>.cql)
+
 ## [0.0.3]
 ### Added
 - Adds a Code Completion for keywords in the language
