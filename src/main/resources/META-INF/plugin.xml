@@ -29,6 +29,10 @@
                 language="Cql"
                 implementationClass="org.pathcheck.intellij.cql.CqlExternalAnnotator"/>
 
+        <completion.contributor
+                language="Cql"
+                implementationClass="org.pathcheck.intellij.cql.CqlCompletionContributor"/>
+
     </extensions>
 
     <applicationListeners>

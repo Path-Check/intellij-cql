@@ -90,12 +90,14 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
     }
 
     private fun annotateIssue(file: PsiFile, holder: AnnotationHolder, issue: CqlCompilerException) {
-        val builder = when (issue.severity) {
-            CqlCompilerException.ErrorSeverity.Error -> holder.newAnnotation(HighlightSeverity.ERROR, issue.message!!)
-            CqlCompilerException.ErrorSeverity.Warning -> holder.newAnnotation(HighlightSeverity.WARNING, issue.message!!)
-            CqlCompilerException.ErrorSeverity.Info -> holder.newAnnotation(HighlightSeverity.INFORMATION, issue.message!!)
-            null -> holder.newAnnotation(HighlightSeverity.GENERIC_SERVER_ERROR_OR_WARNING, issue.message!!)
+        val severity = when (issue.severity) {
+            CqlCompilerException.ErrorSeverity.Error -> HighlightSeverity.ERROR
+            CqlCompilerException.ErrorSeverity.Warning -> HighlightSeverity.WARNING
+            CqlCompilerException.ErrorSeverity.Info -> HighlightSeverity.INFORMATION
+            null -> HighlightSeverity.GENERIC_SERVER_ERROR_OR_WARNING
         }
+
+        val builder = holder.newAnnotation(severity, issue.message ?: "<No message found>")
 
         val keyRange = locatorToRange(issue.locator, file.text)
         if (keyRange != null) {
