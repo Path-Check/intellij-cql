@@ -85,7 +85,7 @@ class CqlParserDefinition : ParserDefinition {
      *
      * RuleIElementType.  Ah! It's that ID is the root
      * IElementType requested to parse, which means that the root
-     * node returned from parsetree->PSI conversion.  But, it
+     * node returned from parse tree->PSI conversion.  But, it
      * must be a CompositeElement! The adaptor calls
      * rootMarker.done(root) to finish off the PSI conversion.
      * See [ANTLRParserAdaptor.parse]

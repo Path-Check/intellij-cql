@@ -14,7 +14,7 @@ class CqlKeywordCompletionProvider: CompletionProvider<CompletionParameters>() {
         }
 
         CqlTokenTypes.KEYWORDNames
-            .filter { it.startsWith("$prefix", true) }
+            .filter { it.startsWith(prefix, true) }
             .forEach { result.addElement(LookupElementBuilder.create(it)) }
     }
 }

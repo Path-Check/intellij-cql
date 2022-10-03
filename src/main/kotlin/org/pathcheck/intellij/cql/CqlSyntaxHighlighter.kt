@@ -8,6 +8,7 @@ import com.intellij.psi.tree.IElementType
 import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor
 import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory
 import org.antlr.intellij.adaptor.lexer.TokenIElementType
+import org.antlr.v4.runtime.VocabularyImpl
 import org.cqframework.cql.gen.cqlLexer
 import org.cqframework.cql.gen.cqlParser
 
@@ -232,7 +233,7 @@ class CqlSyntaxHighlighter : SyntaxHighlighterBase() {
         init {
             PSIElementTypeFactory.defineLanguageIElementTypes(
                 CqlLanguage,
-                cqlParser.tokenNames,
+                (cqlParser.VOCABULARY as VocabularyImpl).literalNames,
                 cqlParser.ruleNames
             )
         }

@@ -16,7 +16,7 @@ object CqlFileType: LanguageFileType(CqlLanguage) {
         return "cql"
     }
 
-    override fun getIcon(): Icon? {
+    override fun getIcon(): Icon {
         return CqlIcons.FILE
     }
 }

@@ -1,8 +1,6 @@
 package org.pathcheck.intellij.cql
 
-import com.intellij.openapi.application.ApplicationManager
 import com.intellij.psi.PsiDirectory
-import com.intellij.psi.PsiFile
 import org.cqframework.cql.cql2elm.LibrarySourceProvider
 import org.cqframework.cql.cql2elm.model.Version
 import org.hl7.elm.r1.VersionedIdentifier

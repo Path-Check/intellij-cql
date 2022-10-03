@@ -7,7 +7,6 @@ import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
 import org.cqframework.cql.cql2elm.*
-import org.cqframework.cql.cql2elm.quick.FhirLibrarySourceProvider
 import org.cqframework.cql.elm.tracking.TrackBack
 import java.io.IOException
 
@@ -33,7 +32,7 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
             try {
                 currentThread.contextClassLoader = pluginClassLoader
                 try {
-                    // ModelManager and Library Manager must be created in this contxt to make sure ServiceLoaders are ready
+                    // ModelManager and Library Manager must be created in this context to make sure ServiceLoaders are ready
                     val modelManager = ModelManager()
                     val libraryManager = LibraryManager(modelManager).apply {
                         librarySourceLoader.registerProvider(PsiDirectoryLibrarySourceProvider(file.containingDirectory))

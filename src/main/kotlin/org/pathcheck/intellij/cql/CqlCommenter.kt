@@ -13,47 +13,47 @@ import org.cqframework.cql.gen.cqlLexer
 //        :	'//' ~[\r\n]*  -> channel(HIDDEN)
 //        ;
 class CqlCommenter : CodeDocumentationAwareCommenter {
-    override fun getLineCommentPrefix(): String? {
+    override fun getLineCommentPrefix(): String {
         return "//"
     }
 
-    override fun getBlockCommentPrefix(): String? {
+    override fun getBlockCommentPrefix(): String {
         return "/*"
     }
 
-    override fun getBlockCommentSuffix(): String? {
+    override fun getBlockCommentSuffix(): String {
         return "*/"
     }
 
-    override fun getCommentedBlockCommentPrefix(): String? {
-        return null
+    override fun getCommentedBlockCommentPrefix(): String {
+        return "*"
     }
 
     override fun getCommentedBlockCommentSuffix(): String? {
         return null
     }
 
-    override fun getLineCommentTokenType(): IElementType? {
+    override fun getLineCommentTokenType(): IElementType {
         return CqlTokenTypes.TOKEN_ELEMENT_TYPES[cqlLexer.LINE_COMMENT]
     }
 
-    override fun getBlockCommentTokenType(): IElementType? {
+    override fun getBlockCommentTokenType(): IElementType {
         return CqlTokenTypes.TOKEN_ELEMENT_TYPES[cqlLexer.COMMENT]
     }
 
-    override fun getDocumentationCommentTokenType(): IElementType? {
+    override fun getDocumentationCommentTokenType(): IElementType {
         return CqlTokenTypes.TOKEN_ELEMENT_TYPES[cqlLexer.COMMENT]
     }
 
-    override fun getDocumentationCommentPrefix(): String? {
+    override fun getDocumentationCommentPrefix(): String {
         return "/*"
     }
 
-    override fun getDocumentationCommentLinePrefix(): String? {
+    override fun getDocumentationCommentLinePrefix(): String {
         return "*"
     }
 
-    override fun getDocumentationCommentSuffix(): String? {
+    override fun getDocumentationCommentSuffix(): String {
         return "*/"
     }
 

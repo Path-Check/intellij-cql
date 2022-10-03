@@ -22,7 +22,7 @@ import org.pathcheck.intellij.cql.CqlSyntaxHighlighter.Companion.VALUE
 import javax.swing.Icon
 
 class CqlColorSettingsPage : ColorSettingsPage {
-    override fun getIcon(): Icon? {
+    override fun getIcon(): Icon {
         return CqlIcons.FILE
     }
 
