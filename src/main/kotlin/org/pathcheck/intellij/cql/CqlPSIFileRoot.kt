@@ -11,7 +11,7 @@ class CqlPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
     }
 
     override fun toString(): String {
-        return "Sample Language file"
+        return "Cql Language file"
     }
 
     override fun getIcon(flags: Int): Icon {
