@@ -13,5 +13,11 @@ class CqlCompletionContributor : CompletionContributor() {
             PlatformPatterns.psiElement(CqlTokenTypes.TOKEN_ELEMENT_TYPES[cqlLexer.IDENTIFIER]),
             CqlKeywordCompletionProvider()
         )
+
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement(CqlTokenTypes.TOKEN_ELEMENT_TYPES[cqlLexer.IDENTIFIER]),
+            CqlIdentifierCompletionProvider()
+        )
     }
 }
