@@ -33,6 +33,9 @@
                 language="Cql"
                 implementationClass="org.pathcheck.intellij.cql.CqlCompletionContributor"/>
 
+        <lang.foldingBuilder language="Cql"
+                             implementationClass="org.pathcheck.intellij.cql.CqlFoldingBuilder"/>
+
     </extensions>
 
     <applicationListeners>

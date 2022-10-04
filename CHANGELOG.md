@@ -6,7 +6,8 @@
 
 ## [0.0.4]
 ### Added
-- Filename check (<libraryName>-<version>.cql)
+- Added folding support
+- Filename check. It should use the format <libraryName>-<version>.cql
 
 ## [0.0.3]
 ### Added
