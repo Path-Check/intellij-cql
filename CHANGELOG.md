@@ -8,6 +8,7 @@
 ### Added
 - Added folding support
 - Filename check. It should use the format <libraryName>-<version>.cql
+- Reference Finder when clicking in the Identifier.
 
 ## [0.0.3]
 ### Added

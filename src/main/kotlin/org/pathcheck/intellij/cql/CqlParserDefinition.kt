@@ -20,6 +20,8 @@ import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.tree.ParseTree
 import org.cqframework.cql.gen.cqlLexer
 import org.cqframework.cql.gen.cqlParser
+import org.pathcheck.intellij.cql.psi.scopes.AggregateClauseDefSubtree
+import org.pathcheck.intellij.cql.psi.scopes.FunctionDefSubtree
 
 class CqlParserDefinition : ParserDefinition {
     override fun createLexer(project: Project): Lexer {
@@ -102,7 +104,12 @@ class CqlParserDefinition : ParserDefinition {
         if (elType !is RuleIElementType) {
             return ANTLRPsiNode(node)
         }
+
         return when (elType.ruleIndex) {
+            // scope targets
+            cqlParser.RULE_functionDefinition -> FunctionDefSubtree(node, elType)
+            cqlParser.RULE_aggregateClause -> AggregateClauseDefSubtree(node, elType)
+
             else -> ANTLRPsiNode(node)
         }
     }

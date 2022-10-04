@@ -36,6 +36,11 @@
         <lang.foldingBuilder language="Cql"
                              implementationClass="org.pathcheck.intellij.cql.CqlFoldingBuilder"/>
 
+        <lang.ast.factory language="Cql" implementationClass="org.pathcheck.intellij.cql.CqlASTFactory"/>
+
+        <lang.findUsagesProvider language="Cql"
+                                 implementationClass="org.pathcheck.intellij.cql.CqlFindUsagesProvider"/>
+
     </extensions>
 
     <applicationListeners>
