@@ -69,6 +69,8 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
     }
 
     private fun checkFileName(fileName: String, library: Library, text: String): List<CqlCompilerException> {
+        if (library.identifier == null || library.identifier.id == null) return emptyList()
+
         val correctName = listOfNotNull(library.identifier.id, library.identifier.version).joinToString("-") + ".cql"
         if (fileName != correctName) {
             val start = text.indexOf(library.identifier.id)
