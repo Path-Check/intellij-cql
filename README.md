@@ -5,7 +5,7 @@
 [![Downloads](https://img.shields.io/jetbrains/plugin/d/20063.svg)](https://plugins.jetbrains.com/plugin/20063)
 
 <!-- Plugin description -->
-Adds syntax highlighting, semantic (error) highlighting, and local execution for the HL7 Clinical Quality Language (CQL). 
+Syntax highlighting, semantic (error) highlighting, code completion, reference finders, and local execution for the HL7 Clinical Quality Language (CQL). 
 
 ## More About the Clinical Quality Language
 
