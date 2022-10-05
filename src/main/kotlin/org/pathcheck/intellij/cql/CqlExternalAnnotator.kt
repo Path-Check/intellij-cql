@@ -108,7 +108,7 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
      */
     private fun locatorToRange(locator: TrackBack, text: String): TextRange? {
         val startChar = (nthIndex(text, '\n', locator.startLine-1) + locator.startChar)
-        var endChar = (nthIndex(text, '\n', locator.endLine-1) + locator.endChar)
+        var endChar = (nthIndex(text, '\n', locator.endLine-1) + locator.endChar + 1)
 
         if (endChar > text.length) endChar = text.length
 
