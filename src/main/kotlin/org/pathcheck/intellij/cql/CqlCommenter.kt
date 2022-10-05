@@ -14,19 +14,19 @@ import org.cqframework.cql.gen.cqlLexer
 //        ;
 class CqlCommenter : CodeDocumentationAwareCommenter {
     override fun getLineCommentPrefix(): String {
-        return "// "
+        return "//"
     }
 
     override fun getBlockCommentPrefix(): String {
-        return "/* "
+        return "/*"
     }
 
     override fun getBlockCommentSuffix(): String {
-        return " */"
+        return "*/"
     }
 
     override fun getCommentedBlockCommentPrefix(): String {
-        return "* "
+        return "*"
     }
 
     override fun getCommentedBlockCommentSuffix(): String? {
@@ -46,15 +46,15 @@ class CqlCommenter : CodeDocumentationAwareCommenter {
     }
 
     override fun getDocumentationCommentPrefix(): String {
-        return "/* "
+        return "/*"
     }
 
     override fun getDocumentationCommentLinePrefix(): String {
-        return "* "
+        return "*"
     }
 
     override fun getDocumentationCommentSuffix(): String {
-        return " */"
+        return "*/"
     }
 
     override fun isDocumentationComment(element: PsiComment?): Boolean {
