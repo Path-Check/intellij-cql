@@ -17,7 +17,9 @@ class CqlIdentifierCompletionProvider: CompletionProvider<CompletionParameters>(
         }
 
         // There must be a better way to get all identifiers of the language
-        val myLexer = ANTLRLexerAdaptor(CqlLanguage, cqlLexer(null))
+        val lexer = AdaptedCqlLexer(null);
+        lexer.removeErrorListeners();
+        val myLexer = ANTLRLexerAdaptor(CqlLanguage, lexer)
         myLexer.start(params.originalFile.text)
 
         val identifiers = mutableListOf<String>()

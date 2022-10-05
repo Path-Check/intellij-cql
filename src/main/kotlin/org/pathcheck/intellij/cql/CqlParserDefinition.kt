@@ -25,7 +25,9 @@ import org.pathcheck.intellij.cql.psi.scopes.FunctionDefSubtree
 
 class CqlParserDefinition : ParserDefinition {
     override fun createLexer(project: Project): Lexer {
-        return ANTLRLexerAdaptor(CqlLanguage, cqlLexer(null))
+        val lexer = AdaptedCqlLexer(null)
+        lexer.removeErrorListeners()
+        return ANTLRLexerAdaptor(CqlLanguage, lexer)
     }
 
     override fun createParser(project: Project): PsiParser {

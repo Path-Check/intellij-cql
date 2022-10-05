@@ -33,7 +33,9 @@ import org.cqframework.cql.gen.cqlParser
  */
 class CqlSyntaxHighlighter : SyntaxHighlighterBase() {
     override fun getHighlightingLexer(): Lexer {
-        return ANTLRLexerAdaptor(CqlLanguage, cqlLexer(null))
+        val lexer = AdaptedCqlLexer(null)
+        lexer.removeErrorListeners()
+        return ANTLRLexerAdaptor(CqlLanguage, lexer)
     }
 
     override fun getTokenHighlights(tokenType: IElementType): Array<out TextAttributesKey?> {
