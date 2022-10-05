@@ -14,8 +14,12 @@ import org.pathcheck.intellij.cql.CqlLanguage
  */
 class AggregateClauseDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode {
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        return SymtabUtils.resolve(
-            this, CqlLanguage, element, "/aggregateClause/identifier"
-        )
+        return listOf(
+            "/aggregateClause/identifier/IDENTIFIER",
+            "/aggregateClause/identifier/DELIMITEDIDENTIFIER",
+            "/aggregateClause/identifier/QUOTEDIDENTIFIER"
+        ).firstNotNullOfOrNull {
+            SymtabUtils.resolve(this, CqlLanguage, element, it)
+        }
     }
 }

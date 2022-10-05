@@ -33,7 +33,8 @@ class CqlPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
      */
     override fun resolve(element: PsiNamedElement): PsiElement? {
         return listOf(
-            "/library/statement/functionDefinition/identifierOrFunctionIdentifier",
+            "/library/statement/functionDefinition/identifierOrFunctionIdentifier/identifier",
+            "/library/statement/functionDefinition/identifierOrFunctionIdentifier/functionIdentifier",
             "/library/statement/expressionDefinition/identifier",
             "/library/definition/usingDefinition/qualifiedIdentifier",
             "/library/definition/usingDefinition/localIdentifier/identifier",
@@ -45,7 +46,17 @@ class CqlPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
             "/library/definition/conceptDefinition/identifier",
             "/library/definition/parameterDefinition/identifier"
         ).map {
+            if (it.endsWith("/identifier"))
+                listOf(
+                    "$it/IDENTIFIER",
+                    "$it/DELIMITEDIDENTIFIER",
+                    "$it/QUOTEDIDENTIFIER"
+                )
+            else
+                listOf(it)
+        }.flatten()
+         .firstNotNullOfOrNull {
             SymtabUtils.resolve(this, CqlLanguage, element, it)
-        }.filterNotNull().firstOrNull()
+        }
     }
 }

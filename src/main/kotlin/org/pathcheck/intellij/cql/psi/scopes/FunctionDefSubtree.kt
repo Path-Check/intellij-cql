@@ -14,8 +14,13 @@ import org.pathcheck.intellij.cql.CqlLanguage
  */
 class FunctionDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode {
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        return SymtabUtils.resolve(
-            this, CqlLanguage, element, "/functionDefinition/operandDefinition/referentialIdentifier/identifier"
-        )
+        return listOf(
+            "/functionDefinition/operandDefinition/referentialIdentifier/identifier/IDENTIFIER",
+            "/functionDefinition/operandDefinition/referentialIdentifier/identifier/DELIMITEDIDENTIFIER",
+            "/functionDefinition/operandDefinition/referentialIdentifier/identifier/QUOTEDIDENTIFIER",
+            "/functionDefinition/operandDefinition/referentialIdentifier/identifier/keywordIdentifier"
+        ).firstNotNullOfOrNull {
+            SymtabUtils.resolve(this, CqlLanguage, element, it)
+        }
     }
 }
