@@ -20,6 +20,7 @@ class CqlFoldingBuilder : FoldingBuilderEx(), DumbAware {
             )
             .map { XPath.findAll(CqlLanguage, root, it) }
             .flatten()
+            .filter { it.textRange.endOffset > it.textRange.startOffset } // define "": causes this exception 
             .map {
                 FoldingDescriptor(
                     it.node,
