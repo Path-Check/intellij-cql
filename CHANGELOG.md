@@ -4,6 +4,14 @@
 
 ## [Unreleased]
 
+## [0.0.5]
+- Adding tooltip for errors.
+- Bugfix for TextRanges: End char is inclusive.
+- Bugfix for FindUsages: must return a leaf element.
+- Bugfix for Commenters: prefixes and suffixes can't have spaces.
+- Bugfix for lexer exceptions (define " EOF)
+- Bugfix for empty folding groups.
+
 ## [0.0.4]
 ### Added
 - Added folding support
@@ -20,9 +28,8 @@
 ## [0.0.2]
 ### Added
 - Fixes NullPointerExceptions in concurrent object creation
-- Fixes QName duplication by removing UCUM's XPP3 dependency. 
+- Fixes QName duplication by removing UCUM's XPP3 dependency.
 
 ## [0.0.1]
 ### Added
 - Adds syntax highlighting, semantic highlighting, compilation, and local execution for the HL7 Clinical Quality Language (CQL).
-
