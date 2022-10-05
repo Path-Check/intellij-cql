@@ -133,6 +133,7 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
         val keyRange = locatorToRange(issue.locator, file.text)
         if (keyRange != null) {
             builder.range(keyRange)
+            issue.message?.let { builder.tooltip(it) }
         }
 
         builder.create()
