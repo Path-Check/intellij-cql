@@ -35,6 +35,9 @@ dependencies {
     implementation("info.cqframework:model-jackson:2.2.0")
     implementation("info.cqframework:elm-jackson:2.2.0")
 
+    implementation("info.cqframework:qdm:2.2.0")
+    implementation("info.cqframework:quick:2.2.0")
+
     implementation("org.opencds.cqf.cql:engine:2.1.0")
     implementation("org.opencds.cqf.cql:engine.jackson:2.1.0")
 
