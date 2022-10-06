@@ -1,8 +1,10 @@
 package org.pathcheck.intellij.cql
 
+import com.intellij.lang.cacheBuilder.DefaultWordsScanner
 import com.intellij.lang.cacheBuilder.WordsScanner
 import com.intellij.lang.findUsages.FindUsagesProvider
 import com.intellij.psi.PsiElement
+import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor
 import org.antlr.intellij.adaptor.lexer.RuleIElementType
 import org.cqframework.cql.gen.cqlParser
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
@@ -18,7 +20,12 @@ class CqlFindUsagesProvider : FindUsagesProvider {
     }
 
     override fun getWordsScanner(): WordsScanner? {
-        return null
+        return DefaultWordsScanner(
+            ANTLRLexerAdaptor(CqlLanguage, AdaptedCqlLexer(null)),
+            CqlTokenTypes.IDENTIFIERS,
+            CqlTokenTypes.COMMENTS,
+            CqlTokenTypes.KEYWORDS
+        )
     }
 
     /** What kind of thing is the ID node? Can group by in "Find Usages" dialog  */
