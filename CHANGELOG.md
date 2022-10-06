@@ -4,6 +4,10 @@
 
 ## [Unreleased]
 
+## [0.0.6]
+- Contextual Find Usages of a function or variable
+- Refactoring: renames now rename all the referenced entities.
+
 ## [0.0.5]
 - Adding tooltip for errors.
 - Bugfix for TextRanges: End char is inclusive.
