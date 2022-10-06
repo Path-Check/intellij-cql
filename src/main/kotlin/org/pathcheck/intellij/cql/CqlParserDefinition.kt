@@ -18,10 +18,10 @@ import org.antlr.intellij.adaptor.parser.ANTLRParserAdaptor
 import org.antlr.intellij.adaptor.psi.ANTLRPsiNode
 import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.tree.ParseTree
-import org.cqframework.cql.gen.cqlLexer
 import org.cqframework.cql.gen.cqlParser
 import org.pathcheck.intellij.cql.psi.scopes.AggregateClauseDefSubtree
 import org.pathcheck.intellij.cql.psi.scopes.FunctionDefSubtree
+import org.pathcheck.intellij.cql.psi.scopes.QueryDefSubtree
 
 class CqlParserDefinition : ParserDefinition {
     override fun createLexer(project: Project): Lexer {
@@ -37,6 +37,11 @@ class CqlParserDefinition : ParserDefinition {
                 // start rule depends on root passed in; sometimes we want to create an ID node etc...
                 if (root is IFileElementType) {
                     return (parser as cqlParser).library()
+                }
+
+                // start rule depends on root passed in; sometimes we want to create an ID node etc...
+                if (root is TokenIElementType) {
+                    return (parser as cqlParser).identifier()
                 }
 
                 throw UnsupportedOperationException("Can't parse ${root?.javaClass?.name}")

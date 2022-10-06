@@ -44,14 +44,14 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
      */
     @Throws(IncorrectOperationException::class)
     override fun setName(name: String): PsiElement {
-        if (parent == null) return this // weird but it happened once
         val newID = Trees.createLeafFromText(
             project,
             CqlLanguage,
             context,
             name,
-            CqlTokenTypes.TOKEN_ELEMENT_TYPES[cqlLexer.IDENTIFIER]
+            elementType
         )
+
         return if (newID != null) {
             this.replace(newID) // use replace on leaves but replaceChild on ID nodes that are part of defs/decls.
         } else this

@@ -2,8 +2,8 @@ package org.pathcheck.intellij.cql.psi.references
 
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiNameIdentifierOwner
 import com.intellij.psi.PsiReferenceBase
+import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
 
@@ -22,19 +22,16 @@ abstract class CqlElementRef(element: IdentifierPSINode, textRange: TextRange) :
         return scope.resolve(element)
     }
 
-    override fun isReferenceTo(def: PsiElement): Boolean {
-        var elem = def
-        val refName: String = element.name
-        if (elem is IdentifierPSINode && isDefSubtree(elem.parent)) {
-            elem = elem.parent
-        }
-        if (isDefSubtree(elem)) {
-            val id = (elem as PsiNameIdentifierOwner).nameIdentifier
-            val defName = id?.text
-            return defName != null && refName == defName
-        }
-        return false
+    @Throws(IncorrectOperationException::class)
+    override fun handleElementRename(newElementName: String): PsiElement? {
+        return myElement?.let { it.setName(newElementName) }
     }
 
-    abstract fun isDefSubtree(def: PsiElement?): Boolean
+    override fun isReferenceTo(def: PsiElement): Boolean {
+        val resolved = resolve()
+        println("${element.text} (${element.textRange}) ${resolved?.text} (${resolved?.textRange})")
+        println("Result " + def.text == resolved?.text && def.textRange == resolved?.textRange)
+
+        return def.text == resolved?.text && def.textRange == resolved?.textRange
+    }
 }
