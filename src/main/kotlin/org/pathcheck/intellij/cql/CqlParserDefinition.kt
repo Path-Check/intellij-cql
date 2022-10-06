@@ -111,6 +111,7 @@ class CqlParserDefinition : ParserDefinition {
             // scope targets
             cqlParser.RULE_functionDefinition -> FunctionDefSubtree(node, elType)
             cqlParser.RULE_aggregateClause -> AggregateClauseDefSubtree(node, elType)
+            cqlParser.RULE_query -> QueryDefSubtree(node, elType)
 
             else -> ANTLRPsiNode(node)
         }
