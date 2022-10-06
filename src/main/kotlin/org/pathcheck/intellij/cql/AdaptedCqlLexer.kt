@@ -29,9 +29,6 @@ class AdaptedCqlLexer(input: CharStream?): cqlLexer(input) {
                 _text = null
                 do {
                     _type = Token.INVALID_TYPE
-                    //				System.out.println("nextToken line "+tokenStartLine+" at "+((char)input.LA(1))+
-//								   " in mode "+mode+
-//								   " at index "+input.index());
                     var ttype = try {
                         interpreter.match(_input, _mode)
                     } catch (e: LexerNoViableAltException) {

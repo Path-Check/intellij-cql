@@ -29,9 +29,6 @@ abstract class CqlElementRef(element: IdentifierPSINode, textRange: TextRange) :
 
     override fun isReferenceTo(def: PsiElement): Boolean {
         val resolved = resolve()
-        println("${element.text} (${element.textRange}) ${resolved?.text} (${resolved?.textRange})")
-        println("Result " + def.text == resolved?.text && def.textRange == resolved?.textRange)
-
         return def.text == resolved?.text && def.textRange == resolved?.textRange
     }
 }
