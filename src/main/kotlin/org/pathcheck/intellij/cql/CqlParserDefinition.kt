@@ -19,9 +19,7 @@ import org.antlr.intellij.adaptor.psi.ANTLRPsiNode
 import org.antlr.v4.runtime.Parser
 import org.antlr.v4.runtime.tree.ParseTree
 import org.cqframework.cql.gen.cqlParser
-import org.pathcheck.intellij.cql.psi.scopes.AggregateClauseDefSubtree
-import org.pathcheck.intellij.cql.psi.scopes.FunctionDefSubtree
-import org.pathcheck.intellij.cql.psi.scopes.QueryDefSubtree
+import org.pathcheck.intellij.cql.psi.scopes.*
 
 class CqlParserDefinition : ParserDefinition {
     override fun createLexer(project: Project): Lexer {
@@ -117,6 +115,8 @@ class CqlParserDefinition : ParserDefinition {
             cqlParser.RULE_functionDefinition -> FunctionDefSubtree(node, elType)
             cqlParser.RULE_aggregateClause -> AggregateClauseDefSubtree(node, elType)
             cqlParser.RULE_query -> QueryDefSubtree(node, elType)
+            cqlParser.RULE_includeDefinition -> IncludeDefSubtree(node, elType)
+            cqlParser.RULE_libraryDefinition -> LibraryDefSubtree(node, elType)
 
             else -> ANTLRPsiNode(node)
         }

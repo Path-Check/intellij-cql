@@ -3,9 +3,13 @@ package org.pathcheck.intellij.cql.psi.references
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
+import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ScopeNode
+import org.pathcheck.intellij.cql.PsiDirectoryLibrarySourceProvider
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
+import org.pathcheck.intellij.cql.psi.scopes.IncludeDefSubtree
+import org.pathcheck.intellij.cql.psi.scopes.LibraryDefSubtree
 
 /**
  * Base class for all references to functions or expressions
@@ -19,7 +23,23 @@ abstract class CqlElementRef(element: IdentifierPSINode, textRange: TextRange) :
 
     override fun resolve(): PsiElement? {
         val scope = element.context as ScopeNode
-        return scope.resolve(element)
+        val inFileReference = scope.resolve(element)
+
+        if (inFileReference != null) {
+            // if it is an includeDefinition, searches in another file.
+            val includeDef = inFileReference.parent?.parent
+            if (includeDef != null && includeDef is IncludeDefSubtree) {
+                return PsiTreeUtil.findChildOfType(
+                    PsiDirectoryLibrarySourceProvider(element.containingFile.containingDirectory)
+                        .getLibrarySourceFile(includeDef.getLibraryVersion()),
+                    LibraryDefSubtree::class.java
+                )?.getLibraryNameElement()
+            }
+
+            return inFileReference
+        }
+
+        return null
     }
 
     @Throws(IncorrectOperationException::class)

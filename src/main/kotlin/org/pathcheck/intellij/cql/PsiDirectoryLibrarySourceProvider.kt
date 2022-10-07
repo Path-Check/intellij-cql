@@ -1,6 +1,7 @@
 package org.pathcheck.intellij.cql
 
 import com.intellij.psi.PsiDirectory
+import com.intellij.psi.PsiFile
 import org.cqframework.cql.cql2elm.LibrarySourceProvider
 import org.cqframework.cql.cql2elm.model.Version
 import org.hl7.elm.r1.VersionedIdentifier
@@ -18,21 +19,21 @@ class PsiDirectoryLibrarySourceProvider(private val path: PsiDirectory) : Librar
         return Version(fileName.substring(fileName.indexOf("-")+1, fileName.lastIndexOf(".")))
     }
 
-    override fun getLibrarySource(libraryIdentifier: VersionedIdentifier): InputStream? {
+    fun getLibrarySourceFile(libraryIdentifier: VersionedIdentifier): PsiFile? {
         val libraryName = libraryIdentifier.id
         val libraryVersion = libraryIdentifier.version
 
         // look for <filename>-<version>.cql
         val psiFile = path.findFile(listOfNotNull(libraryName, libraryVersion).joinToString("-")+".cql")
         if (psiFile != null) {
-            return psiFile.text.byteInputStream()
+            return psiFile
         }
 
         // If the file is named correctly, but has no version, consider it the most recent version
         // look for <filename>.cql
         val noVersion = path.findFile("$libraryName.cql")
         if (noVersion != null) {
-            return noVersion.text.byteInputStream()
+            return noVersion
         }
 
         val requestedVersion = if (libraryVersion != null) Version(libraryVersion) else null
@@ -45,9 +46,13 @@ class PsiDirectoryLibrarySourceProvider(private val path: PsiDirectory) : Librar
 
 
         if (newestCompatibleVersion != null) {
-            return newestCompatibleVersion.text.byteInputStream()
+            return newestCompatibleVersion
         }
 
         return null
+    }
+
+    override fun getLibrarySource(libraryIdentifier: VersionedIdentifier): InputStream? {
+        return getLibrarySourceFile(libraryIdentifier)?.text?.byteInputStream()
     }
 }

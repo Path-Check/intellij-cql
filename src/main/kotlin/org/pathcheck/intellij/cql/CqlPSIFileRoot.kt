@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.ScopeNode
+import org.antlr.intellij.adaptor.xpath.XPath
 import javax.swing.Icon
 
 
@@ -36,10 +37,10 @@ class CqlPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
             "/library/statement/functionDefinition/identifierOrFunctionIdentifier/identifier",
             "/library/statement/functionDefinition/identifierOrFunctionIdentifier/functionIdentifier",
             "/library/statement/expressionDefinition/identifier",
-            "/library/definition/usingDefinition/qualifiedIdentifier/identifier",
             "/library/definition/usingDefinition/localIdentifier/identifier",
-            "/library/definition/includeDefinition/qualifiedIdentifier/identifier",
+            "/library/definition/usingDefinition/qualifiedIdentifier/identifier",
             "/library/definition/includeDefinition/localIdentifier/identifier",
+            "/library/definition/includeDefinition/qualifiedIdentifier/identifier",
             "/library/definition/codesystemDefinition/identifier",
             "/library/definition/valuesetDefinition/identifier",
             "/library/definition/codeDefinition/identifier",
@@ -57,6 +58,16 @@ class CqlPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
         }.flatten()
          .firstNotNullOfOrNull {
             SymtabUtils.resolve(this, CqlLanguage, element, it)
+        }
+    }
+
+    fun getLibraryNameElement(): PsiElement? {
+        return listOf(
+            "/library/libraryDefinition/qualifiedIdentifier/identifier/IDENTIFIER",
+            "/library/libraryDefinition/qualifiedIdentifier/identifier/DELIMITEDIDENTIFIER",
+            "/library/libraryDefinition/qualifiedIdentifier/identifier/QUOTEDIDENTIFIER",
+        ).firstNotNullOfOrNull {
+            return XPath.findAll(CqlLanguage, this, it).firstOrNull()
         }
     }
 }
