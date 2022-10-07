@@ -41,6 +41,8 @@
         <lang.findUsagesProvider language="Cql"
                                  implementationClass="org.pathcheck.intellij.cql.CqlFindUsagesProvider"/>
 
+        <lang.namesValidator language="Cql" implementationClass="org.pathcheck.intellij.cql.CqlNamesValidator"/>
+
     </extensions>
 
     <applicationListeners>
