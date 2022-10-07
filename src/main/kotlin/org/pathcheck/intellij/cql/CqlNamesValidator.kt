@@ -3,7 +3,6 @@ package org.pathcheck.intellij.cql
 import com.intellij.lang.refactoring.NamesValidator
 import com.intellij.openapi.project.Project
 import org.antlr.v4.runtime.*
-import org.antlr.v4.runtime.tree.ParseTree
 import org.cqframework.cql.gen.cqlLexer
 import org.cqframework.cql.gen.cqlParser
 
