@@ -8,10 +8,8 @@ import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.lexer.RuleIElementType
 import org.antlr.intellij.adaptor.psi.ANTLRPsiLeafNode
 import org.antlr.intellij.adaptor.psi.Trees
-import org.cqframework.cql.gen.cqlLexer
 import org.cqframework.cql.gen.cqlParser
 import org.pathcheck.intellij.cql.CqlLanguage
-import org.pathcheck.intellij.cql.CqlTokenTypes
 import org.pathcheck.intellij.cql.psi.references.ExpressionRef
 import org.pathcheck.intellij.cql.psi.references.FunctionRef
 
@@ -80,6 +78,7 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
                 cqlParser.RULE_function -> FunctionRef(this)
                 cqlParser.RULE_qualifiedFunction -> ExpressionRef(this)
                 cqlParser.RULE_referentialIdentifier -> ExpressionRef(this)
+
                 else -> null
             }
             return reference
