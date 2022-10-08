@@ -9,7 +9,6 @@ import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.lexer.RuleIElementType
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import org.cqframework.cql.gen.cqlLexer
 import org.cqframework.cql.gen.cqlParser
 import org.pathcheck.intellij.cql.CqlLanguage
 
@@ -29,7 +28,7 @@ class QueryDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
 
             checkElementIsFromAlias = checkElementIsFromAlias.parent
         }
-        
+
         return listOf(
             "/query/sourceClause/aliasedQuerySource/alias/identifier/IDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/alias/identifier/DELIMITEDIDENTIFIER",
