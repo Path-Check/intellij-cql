@@ -36,17 +36,12 @@ class QueryDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
         }
 
         // Finds the aliases that were defined under this subtree and checks if the element is one of these aliases.
-        listOf(
+        return listOf(
             "/query/sourceClause/aliasedQuerySource/alias/identifier/IDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/alias/identifier/DELIMITEDIDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/alias/identifier/QUOTEDIDENTIFIER",
         ).firstNotNullOfOrNull {
             SymtabUtils.resolve(this, CqlLanguage, element, it)
-        }?.let {
-            return it
         }
-
-        // sends to parent scope.
-        return (parent.context as? ScopeNode)?.resolve(element)
     }
 }
