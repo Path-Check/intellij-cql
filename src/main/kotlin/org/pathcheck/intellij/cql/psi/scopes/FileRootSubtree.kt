@@ -13,7 +13,7 @@ import org.pathcheck.intellij.cql.CqlLanguage
 import javax.swing.Icon
 
 
-class CqlPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, CqlLanguage), ScopeNode {
+class FileRootSubtree(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, CqlLanguage), ScopeNode {
     override fun getFileType(): FileType {
         return CqlFileType
     }

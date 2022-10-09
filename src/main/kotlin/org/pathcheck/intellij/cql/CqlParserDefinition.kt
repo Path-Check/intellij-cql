@@ -79,7 +79,7 @@ class CqlParserDefinition : ParserDefinition {
      * it back via: [PsiFile.getNode].
      */
     override fun createFile(viewProvider: FileViewProvider): PsiFile {
-        return CqlPSIFileRoot(viewProvider)
+        return FileRootSubtree(viewProvider)
     }
 
     /** Convert from *NON-LEAF* parse node (AST they call it)

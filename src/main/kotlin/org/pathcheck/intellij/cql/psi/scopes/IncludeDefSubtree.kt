@@ -25,9 +25,9 @@ class IncludeDefSubtree(node: ASTNode, idElementType: IElementType) : Identifier
         return getLinkedLibrary()?.resolve(element)
     }
 
-    private fun getLinkedLibrary(): CqlPSIFileRoot? {
+    private fun getLinkedLibrary(): FileRootSubtree? {
         return PsiDirectoryLibrarySourceProvider(containingFile.containingDirectory)
-            .getLibrarySourceFile(getLibraryVersion()) as? CqlPSIFileRoot
+            .getLibrarySourceFile(getLibraryVersion()) as? FileRootSubtree
     }
 
     private fun getLibraryVersion(): VersionedIdentifier {
