@@ -16,8 +16,12 @@ import org.pathcheck.intellij.cql.CqlLanguage
  * Its scope is the set of arguments.
  */
 class QueryDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode {
+    /**
+     * User clicked in the [element]. This function tries to find the definition token related to the [element]
+     * inside this subtree and return it.
+     */
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        // only resolves if it comes from the alias subtrue
+        // only resolves if it comes from a non-definition element
         var checkElementIsFromAlias: PsiElement = element
         while (checkElementIsFromAlias.parent !is QueryDefSubtree) {
             if (checkElementIsFromAlias.node.elementType is RuleIElementType
@@ -29,6 +33,7 @@ class QueryDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
             checkElementIsFromAlias = checkElementIsFromAlias.parent
         }
 
+        // Finds the aliases that were defined under this subtree and checks if the element is one of these aliases.
         return listOf(
             "/query/sourceClause/aliasedQuerySource/alias/identifier/IDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/alias/identifier/DELIMITEDIDENTIFIER",
