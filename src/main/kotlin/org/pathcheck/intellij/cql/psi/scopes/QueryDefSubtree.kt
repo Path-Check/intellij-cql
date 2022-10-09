@@ -5,6 +5,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.elementType
+import com.intellij.psi.util.findParentInFile
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.lexer.RuleIElementType
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
@@ -22,15 +23,11 @@ class QueryDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
      */
     override fun resolve(element: PsiNamedElement): PsiElement? {
         // only resolves if it comes from a non-definition element
-        var checkElementIsFromAlias: PsiElement = element
-        while (checkElementIsFromAlias.parent !is QueryDefSubtree) {
-            if (checkElementIsFromAlias.node.elementType is RuleIElementType
-                && (checkElementIsFromAlias.node.elementType as RuleIElementType).ruleIndex == cqlParser.RULE_querySource) {
-                // passes it forward.
-                return (parent.context as? ScopeNode)?.resolve(element)
-            }
-
-            checkElementIsFromAlias = checkElementIsFromAlias.parent
+        element.findParentInFile {
+            val elType = it.node.elementType
+            elType is RuleIElementType && elType.ruleIndex == cqlParser.RULE_querySource
+        }?.let {
+            return (parent.context as? ScopeNode)?.resolve(element)
         }
 
         // Finds the aliases that were defined under this subtree and checks if the element is one of these aliases.

@@ -14,6 +14,7 @@ import org.pathcheck.intellij.cql.psi.IdentifierPSINode
  * to override.
  */
 class CqlASTFactory : DefaultASTFactoryImpl() {
+
     /** Create a parse tree (AST) leaf node from a token. Doubles as a PSI leaf node.
      * Does not see whitespace tokens.  Default impl makes [LeafPsiElement]
      * or [PsiCoreCommentImpl] depending on [ParserDefinition.getCommentTokens].

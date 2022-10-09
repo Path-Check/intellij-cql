@@ -12,7 +12,7 @@ import org.pathcheck.intellij.cql.psi.scopes.IncludeDefSubtree
 import org.pathcheck.intellij.cql.psi.scopes.LibraryDefSubtree
 
 /**
- * Represents any clickable set of Characters in the editor
+ * Represents any resolvable identifier in the editor
  */
 class CqlReference(element: IdentifierPSINode) :
     PsiReferenceBase<IdentifierPSINode?>(element, TextRange(0, element.text.length)) {
@@ -23,23 +23,7 @@ class CqlReference(element: IdentifierPSINode) :
 
     override fun resolve(): PsiElement? {
         val scope = element.context as ScopeNode
-        val inFileReference = scope.resolve(element)
-
-        if (inFileReference != null) {
-            // if it is an includeDefinition, searches in another file.
-            val includeDef = inFileReference.parent?.parent
-            if (includeDef != null && includeDef is IncludeDefSubtree) {
-                return PsiTreeUtil.findChildOfType(
-                    PsiDirectoryLibrarySourceProvider(element.containingFile.containingDirectory)
-                        .getLibrarySourceFile(includeDef.getLibraryVersion()),
-                    LibraryDefSubtree::class.java
-                )?.getLibraryNameElement()
-            }
-
-            return inFileReference
-        }
-
-        return null
+        return scope.resolve(element)
     }
 
     @Throws(IncorrectOperationException::class)

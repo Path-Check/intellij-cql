@@ -61,14 +61,4 @@ class CqlPSIFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider,
             SymtabUtils.resolve(this, CqlLanguage, element, it)
         }
     }
-
-    fun getLibraryNameElement(): PsiElement? {
-        return listOf(
-            "/library/libraryDefinition/qualifiedIdentifier/identifier/IDENTIFIER",
-            "/library/libraryDefinition/qualifiedIdentifier/identifier/DELIMITEDIDENTIFIER",
-            "/library/libraryDefinition/qualifiedIdentifier/identifier/QUOTEDIDENTIFIER",
-        ).firstNotNullOfOrNull {
-            return XPath.findAll(CqlLanguage, this, it).firstOrNull()
-        }
-    }
 }

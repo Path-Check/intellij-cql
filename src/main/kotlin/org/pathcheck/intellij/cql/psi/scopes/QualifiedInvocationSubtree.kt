@@ -4,11 +4,14 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.util.PsiTreeUtil
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.antlr.intellij.adaptor.xpath.XPath
 import org.pathcheck.intellij.cql.CqlLanguage
+import org.pathcheck.intellij.cql.CqlPSIFileRoot
+import org.pathcheck.intellij.cql.PsiDirectoryLibrarySourceProvider
 
 /** A subtree associated with a function definition.
  * Its scope is the set of arguments.
@@ -33,7 +36,7 @@ class QualifiedInvocationSubtree(node: ASTNode, idElementType: IElementType) : I
             return (parent.context as? ScopeNode)?.resolve(element)
         }
 
-        val qualifier = listOf(
+        val qualifierOfThisElement = listOf(
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/IDENTIFIER",
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/DELIMITEDIDENTIFIER",
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/QUOTEDIDENTIFIER"
@@ -42,8 +45,12 @@ class QualifiedInvocationSubtree(node: ASTNode, idElementType: IElementType) : I
             XPath.findAll(CqlLanguage, this.parent, it).firstOrNull()
         }
 
-        val qualifierDefinition = qualifier?.reference?.resolve()
-        val qualifierDefinitionScope = qualifierDefinition?.context as? ScopeNode
+        val qualifierDefinitionScope = qualifierOfThisElement?.reference?.resolve()?.context as? ScopeNode
+
+        if (qualifierDefinitionScope is IncludeDefSubtree) {
+            return qualifierDefinitionScope.resolveInLinkedLibrary(element)
+        }
+
         return qualifierDefinitionScope?.resolve(element)
     }
 }

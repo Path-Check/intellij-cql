@@ -4,6 +4,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.PsiReference
 import com.intellij.psi.tree.IElementType
+import com.intellij.psi.util.findParentInFile
 import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.lexer.RuleIElementType
 import org.antlr.intellij.adaptor.psi.ANTLRPsiLeafNode
@@ -69,19 +70,28 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
      * as we have parent (context) information.
      */
     override fun getReference(): PsiReference? {
-        // Comes at the leaf, so: IDENTIFIER -> identifier -> referentialIdentifier
-        val elType = parent.parent.node.elementType
-        // do not return a reference for the ID nodes in a definition
-        if (elType is RuleIElementType) {
-            val reference = when (elType.ruleIndex) {
-                cqlParser.RULE_identifierOrFunctionIdentifier -> CqlReference(this)
-                cqlParser.RULE_function -> CqlReference(this)
-                cqlParser.RULE_referentialIdentifier -> CqlReference(this)
-
-                else -> null
-            }
-            return reference
+        findParentInFile {
+            val elType = it.node.elementType
+            elType is RuleIElementType && (
+                     elType.ruleIndex == cqlParser.RULE_invocation
+                  || elType.ruleIndex == cqlParser.RULE_qualifiedInvocation
+                  || elType.ruleIndex == cqlParser.RULE_qualifiedIdentifierExpression // QuerySource from variable
+            )
+        }?.let {
+            return CqlReference(this)
         }
+
+       // LibraryDef, IncludeDef, UsingDef
+       findParentInFile {
+            val elType = it.node.elementType
+            elType is RuleIElementType && (elType.ruleIndex == cqlParser.RULE_qualifiedIdentifier)
+        }?.let {
+            return CqlReference(this)
+        }
+
+        //println("Found ${parent.parent.parent.parent}.${parent.parent.parent}.${parent.parent}.${parent}")
+        //println("Found $ref")
+
         return null
     }
 }
