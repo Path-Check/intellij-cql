@@ -1,4 +1,4 @@
-package org.pathcheck.intellij.cql
+package org.pathcheck.intellij.cql.psi.scopes
 
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.fileTypes.FileType
@@ -7,7 +7,9 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import org.antlr.intellij.adaptor.xpath.XPath
+import org.pathcheck.intellij.cql.CqlFileType
+import org.pathcheck.intellij.cql.CqlIcons
+import org.pathcheck.intellij.cql.CqlLanguage
 import javax.swing.Icon
 
 

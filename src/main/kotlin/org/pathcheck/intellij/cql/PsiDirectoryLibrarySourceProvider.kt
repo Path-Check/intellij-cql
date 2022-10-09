@@ -5,7 +5,7 @@ import com.intellij.psi.PsiFile
 import org.cqframework.cql.cql2elm.LibrarySourceProvider
 import org.cqframework.cql.cql2elm.model.Version
 import org.hl7.elm.r1.VersionedIdentifier
-import java.io.*
+import java.io.InputStream
 
 // NOTE: This implementation is naive and assumes library file names will always take the form:
 // <filename>[-<version>].cql

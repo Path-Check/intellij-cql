@@ -7,8 +7,6 @@ import com.intellij.psi.tree.IElementType
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import org.antlr.intellij.adaptor.xpath.XPath
-import org.hl7.elm.r1.VersionedIdentifier
 import org.pathcheck.intellij.cql.CqlLanguage
 
 /** A subtree associated with a query.

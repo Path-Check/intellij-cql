@@ -7,7 +7,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.psi.tree.IElementType
 import com.intellij.util.ProcessingContext
 import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor
-import org.cqframework.cql.gen.cqlLexer
 
 class CqlIdentifierCompletionProvider: CompletionProvider<CompletionParameters>() {
     override fun addCompletions(params: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {

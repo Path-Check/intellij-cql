@@ -3,13 +3,9 @@ package org.pathcheck.intellij.cql.psi.references
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
-import com.intellij.psi.util.PsiTreeUtil
 import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import org.pathcheck.intellij.cql.PsiDirectoryLibrarySourceProvider
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
-import org.pathcheck.intellij.cql.psi.scopes.IncludeDefSubtree
-import org.pathcheck.intellij.cql.psi.scopes.LibraryDefSubtree
 
 /**
  * Represents any resolvable identifier in the editor
