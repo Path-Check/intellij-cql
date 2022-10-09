@@ -118,6 +118,7 @@ class CqlParserDefinition : ParserDefinition {
             cqlParser.RULE_includeDefinition -> IncludeDefSubtree(node, elType)
             cqlParser.RULE_libraryDefinition -> LibraryDefSubtree(node, elType)
             cqlParser.RULE_qualifiedInvocation -> QualifiedInvocationSubtree(node, elType)
+            cqlParser.RULE_contextDefinition -> ContextDefSubtree(node, elType)
 
             else -> ANTLRPsiNode(node)
         }
