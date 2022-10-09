@@ -27,7 +27,6 @@ class QualifiedInvocationSubtree(node: ASTNode, idElementType: IElementType) : I
             "/qualifiedInvocation/qualifiedFunction/identifierOrFunctionIdentifier/identifier/QUOTEDIDENTIFIER"
         ).firstNotNullOfOrNull {
             XPath.findAll(CqlLanguage, this, it).firstOrNull()
-            //SymtabUtils.resolve(this, CqlLanguage, element, it)
         }
 
         // Only resolves qualifiers for the members, not subset of elements

@@ -14,12 +14,17 @@ import org.pathcheck.intellij.cql.CqlLanguage
  */
 class AggregateClauseDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode {
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        return listOf(
+        listOf(
             "/aggregateClause/identifier/IDENTIFIER",
             "/aggregateClause/identifier/DELIMITEDIDENTIFIER",
             "/aggregateClause/identifier/QUOTEDIDENTIFIER"
         ).firstNotNullOfOrNull {
             SymtabUtils.resolve(this, CqlLanguage, element, it)
+        }?.let {
+            return it
         }
+
+        // sends to parent scope.
+        return (parent.context as? ScopeNode)?.resolve(element)
     }
 }

@@ -10,6 +10,8 @@ import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.lexer.RuleIElementType
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
+import org.antlr.intellij.adaptor.xpath.XPath
+import org.apache.xmlbeans.impl.xb.xsdschema.FieldDocument.Field.Xpath
 import org.cqframework.cql.gen.cqlParser
 import org.pathcheck.intellij.cql.CqlLanguage
 
@@ -22,21 +24,34 @@ class QueryDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
      * inside this subtree and return it.
      */
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        // only resolves if it comes from a non-definition element
-        element.findParentInFile {
-            val elType = it.node.elementType
-            elType is RuleIElementType && elType.ruleIndex == cqlParser.RULE_querySource
+        // only resolves if it comes from a non-definition element of the current node.
+        listOf(
+            "/query/sourceClause/aliasedQuerySource/querySource/qualifiedIdentifierExpression/referentialIdentifier/identifier/IDENTIFIER",
+            "/query/sourceClause/aliasedQuerySource/querySource/qualifiedIdentifierExpression/referentialIdentifier/identifier/DELIMITEDIDENTIFIER",
+            "/query/sourceClause/aliasedQuerySource/querySource/qualifiedIdentifierExpression/referentialIdentifier/identifier/QUOTEDIDENTIFIER",
+
+            "/query/sourceClause/aliasedQuerySource/querySource/qualifiedIdentifierExpression/qualifierExpression/referentialIdentifier/identifier/IDENTIFIER",
+            "/query/sourceClause/aliasedQuerySource/querySource/qualifiedIdentifierExpression/qualifierExpression/referentialIdentifier/identifier/DELIMITEDIDENTIFIER",
+            "/query/sourceClause/aliasedQuerySource/querySource/qualifiedIdentifierExpression/qualifierExpression/referentialIdentifier/identifier/QUOTEDIDENTIFIER",
+        ).firstNotNullOfOrNull {
+            XPath.findAll(CqlLanguage, this, it).firstOrNull()
         }?.let {
-            return (parent.context as? ScopeNode)?.resolve(element)
+            if (it.text == element.text && it.textRange == element.textRange)
+                return (parent.context as? ScopeNode)?.resolve(element)
         }
 
         // Finds the aliases that were defined under this subtree and checks if the element is one of these aliases.
-        return listOf(
+        listOf(
             "/query/sourceClause/aliasedQuerySource/alias/identifier/IDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/alias/identifier/DELIMITEDIDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/alias/identifier/QUOTEDIDENTIFIER",
         ).firstNotNullOfOrNull {
             SymtabUtils.resolve(this, CqlLanguage, element, it)
+        }?.let {
+            return it
         }
+
+        // sends to parent scope.
+        return (parent.context as? ScopeNode)?.resolve(element)
     }
 }
