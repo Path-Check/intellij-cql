@@ -12,10 +12,10 @@ import org.pathcheck.intellij.cql.psi.scopes.IncludeDefSubtree
 import org.pathcheck.intellij.cql.psi.scopes.LibraryDefSubtree
 
 /**
- * Base class for all references to functions or expressions
+ * Represents any clickable set of Characters in the editor
  */
-abstract class CqlElementRef(element: IdentifierPSINode, textRange: TextRange) :
-    PsiReferenceBase<IdentifierPSINode?>(element, textRange) {
+class CqlReference(element: IdentifierPSINode) :
+    PsiReferenceBase<IdentifierPSINode?>(element, TextRange(0, element.text.length)) {
 
     override fun getVariants(): Array<Any> {
         return emptyArray()

@@ -10,8 +10,7 @@ import org.antlr.intellij.adaptor.psi.ANTLRPsiLeafNode
 import org.antlr.intellij.adaptor.psi.Trees
 import org.cqframework.cql.gen.cqlParser
 import org.pathcheck.intellij.cql.CqlLanguage
-import org.pathcheck.intellij.cql.psi.references.ExpressionRef
-import org.pathcheck.intellij.cql.psi.references.FunctionRef
+import org.pathcheck.intellij.cql.psi.references.CqlReference
 
 /** From doc: "Every element which can be renamed or referenced
  * needs to implement com.intellij.psi.PsiNamedElement interface."
@@ -55,7 +54,8 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
         } else this
     }
 
-    /** Create and return a PsiReference object associated with this ID
+    /**
+     * Create and return a PsiReference object associated with this ID
      * node. The reference object will be asked to resolve this ref
      * by using the text of this node to identify the appropriate definition
      * site. The definition site is typically a subtree for a function
@@ -74,10 +74,9 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
         // do not return a reference for the ID nodes in a definition
         if (elType is RuleIElementType) {
             val reference = when (elType.ruleIndex) {
-                cqlParser.RULE_identifierOrFunctionIdentifier -> FunctionRef(this)
-                cqlParser.RULE_function -> FunctionRef(this)
-                cqlParser.RULE_qualifiedFunction -> ExpressionRef(this)
-                cqlParser.RULE_referentialIdentifier -> ExpressionRef(this)
+                cqlParser.RULE_identifierOrFunctionIdentifier -> CqlReference(this)
+                cqlParser.RULE_function -> CqlReference(this)
+                cqlParser.RULE_referentialIdentifier -> CqlReference(this)
 
                 else -> null
             }
