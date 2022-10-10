@@ -7,6 +7,7 @@ import com.intellij.psi.tree.IElementType
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
+import org.antlr.intellij.adaptor.xpath.XPath
 import org.pathcheck.intellij.cql.CqlLanguage
 
 /** A subtree associated with a query.
@@ -14,12 +15,18 @@ import org.pathcheck.intellij.cql.CqlLanguage
  */
 class ContextDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode {
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        return listOf(
+        listOf(
             "/contextDefinition/identifier/IDENTIFIER",
             "/contextDefinition/identifier/DELIMITEDIDENTIFIER",
             "/contextDefinition/identifier/QUOTEDIDENTIFIER",
-        ).firstNotNullOfOrNull {
-            return SymtabUtils.resolve(this, CqlLanguage, element, it)
+        ).mapNotNull {
+            XPath.findAll(CqlLanguage, this, it)
+        }.flatten().firstOrNull() {
+            it.text == element.name
+        }?.let {
+            return it.parent
         }
+
+        return context?.resolve(element)
     }
 }

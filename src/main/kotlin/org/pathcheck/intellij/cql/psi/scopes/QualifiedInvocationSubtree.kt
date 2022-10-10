@@ -21,24 +21,23 @@ class QualifiedInvocationSubtree(node: ASTNode, idElementType: IElementType) : I
             "/qualifiedInvocation/qualifiedFunction/identifierOrFunctionIdentifier/identifier/IDENTIFIER",
             "/qualifiedInvocation/qualifiedFunction/identifierOrFunctionIdentifier/identifier/DELIMITEDIDENTIFIER",
             "/qualifiedInvocation/qualifiedFunction/identifierOrFunctionIdentifier/identifier/QUOTEDIDENTIFIER"
-        ).firstNotNullOfOrNull {
-            XPath.findAll(CqlLanguage, this, it).firstOrNull()
-        }
+        ).mapNotNull {
+            XPath.findAll(CqlLanguage, this, it)
+        }.flatten().firstOrNull()
 
         // Only resolves qualifiers for the members, not subset of elements
         if (member?.text != element.text || member?.textRange != member?.textRange) {
             // passes it forward.
-            return (parent.context as? ScopeNode)?.resolve(element)
+            return context?.resolve(element)
         }
 
         val qualifierOfThisElement = listOf(
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/IDENTIFIER",
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/DELIMITEDIDENTIFIER",
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/QUOTEDIDENTIFIER"
-        ).firstNotNullOfOrNull {
-            //SymtabUtils.resolve(this, CqlLanguage, member, it)
-            XPath.findAll(CqlLanguage, this.parent, it).firstOrNull()
-        }
+        ).mapNotNull {
+            XPath.findAll(CqlLanguage, this.parent, it)
+        }.flatten().firstOrNull()
 
         val qualifierDefinitionScope = qualifierOfThisElement?.reference?.resolve()?.context as? ScopeNode
 

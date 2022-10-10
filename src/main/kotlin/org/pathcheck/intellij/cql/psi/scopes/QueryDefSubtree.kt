@@ -7,6 +7,7 @@ import com.intellij.psi.tree.IElementType
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
+import org.antlr.intellij.adaptor.psi.Trees
 import org.antlr.intellij.adaptor.xpath.XPath
 import org.pathcheck.intellij.cql.CqlLanguage
 
@@ -28,20 +29,27 @@ class QueryDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
             "/query/sourceClause/aliasedQuerySource/querySource/qualifiedIdentifierExpression/qualifierExpression/referentialIdentifier/identifier/IDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/querySource/qualifiedIdentifierExpression/qualifierExpression/referentialIdentifier/identifier/DELIMITEDIDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/querySource/qualifiedIdentifierExpression/qualifierExpression/referentialIdentifier/identifier/QUOTEDIDENTIFIER",
-        ).firstNotNullOfOrNull {
-            XPath.findAll(CqlLanguage, this, it).firstOrNull()
-        }?.let {
+        ).mapNotNull {
+            XPath.findAll(CqlLanguage, this, it)
+        }.flatten().firstOrNull()?.let {
             if (it.text == element.text && it.textRange == element.textRange)
-                return (parent.context as? ScopeNode)?.resolve(element)
+                return context?.resolve(element)
         }
 
         // Finds the aliases that were defined under this subtree and checks if the element is one of these aliases.
-        return listOf(
+        listOf(
             "/query/sourceClause/aliasedQuerySource/alias/identifier/IDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/alias/identifier/DELIMITEDIDENTIFIER",
             "/query/sourceClause/aliasedQuerySource/alias/identifier/QUOTEDIDENTIFIER",
-        ).firstNotNullOfOrNull {
-            SymtabUtils.resolve(this, CqlLanguage, element, it)
+        ).mapNotNull {
+            XPath.findAll(CqlLanguage, this, it)
+        }.flatten().firstOrNull() {
+            it.text == element.text
+        }?.let {
+            return it.parent
         }
+
+        // sends to parent scope.
+        return context?.resolve(element)
     }
 }

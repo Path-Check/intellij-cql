@@ -15,13 +15,19 @@ import org.pathcheck.intellij.cql.CqlLanguage
  */
 class LibraryDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode {
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        return listOf(
+        listOf(
             "/libraryDefinition/qualifiedIdentifier/identifier/IDENTIFIER",
             "/libraryDefinition/qualifiedIdentifier/identifier/DELIMITEDIDENTIFIER",
             "/libraryDefinition/qualifiedIdentifier/identifier/QUOTEDIDENTIFIER",
-        ).firstNotNullOfOrNull {
-            return SymtabUtils.resolve(this, CqlLanguage, element, it)
+        ).mapNotNull {
+            XPath.findAll(CqlLanguage, this, it)
+        }.flatten().firstOrNull() {
+            it.text == element.text
+        }?.let {
+            return it.parent
         }
+
+        return context?.resolve(element)
     }
 
     fun getLibraryNameElement(): PsiElement? {
@@ -29,8 +35,8 @@ class LibraryDefSubtree(node: ASTNode, idElementType: IElementType) : Identifier
             "/libraryDefinition/qualifiedIdentifier/identifier/IDENTIFIER",
             "/libraryDefinition/qualifiedIdentifier/identifier/DELIMITEDIDENTIFIER",
             "/libraryDefinition/qualifiedIdentifier/identifier/QUOTEDIDENTIFIER",
-        ).firstNotNullOfOrNull {
-            return XPath.findAll(CqlLanguage, this, it).firstOrNull()
-        }
+        ).mapNotNull {
+            XPath.findAll(CqlLanguage, this, it)
+        }.flatten().firstOrNull()
     }
 }

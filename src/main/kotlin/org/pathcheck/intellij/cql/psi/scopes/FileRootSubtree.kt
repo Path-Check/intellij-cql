@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.ScopeNode
+import org.antlr.intellij.adaptor.xpath.XPath
 import org.pathcheck.intellij.cql.CqlFileType
 import org.pathcheck.intellij.cql.CqlIcons
 import org.pathcheck.intellij.cql.CqlLanguage
@@ -35,7 +36,7 @@ class FileRootSubtree(viewProvider: FileViewProvider) : PsiFileBase(viewProvider
      * Looks for identifiers that match the declaration of the element.
      */
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        return listOf(
+        listOf(
             "/library/statement/functionDefinition/identifierOrFunctionIdentifier/identifier",
             "/library/statement/functionDefinition/identifierOrFunctionIdentifier/functionIdentifier",
             "/library/statement/expressionDefinition/identifier",
@@ -58,9 +59,14 @@ class FileRootSubtree(viewProvider: FileViewProvider) : PsiFileBase(viewProvider
                 )
             else
                 listOf(it)
-        }.flatten()
-         .firstNotNullOfOrNull {
-            SymtabUtils.resolve(this, CqlLanguage, element, it)
+        }.flatten().mapNotNull {
+            XPath.findAll(CqlLanguage, this, it)
+        }.flatten().firstOrNull() {
+            it.text == element.text
+        }?.let {
+            return it.parent
         }
+
+        return null
     }
 }
