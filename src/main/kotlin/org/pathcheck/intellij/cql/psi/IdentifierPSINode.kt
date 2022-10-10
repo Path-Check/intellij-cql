@@ -76,21 +76,11 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
                      elType.ruleIndex == cqlParser.RULE_invocation
                   || elType.ruleIndex == cqlParser.RULE_qualifiedInvocation
                   || elType.ruleIndex == cqlParser.RULE_qualifiedIdentifierExpression // QuerySource from variable
+                  || elType.ruleIndex == cqlParser.RULE_qualifiedIdentifier // LibraryDef, IncludeDef, UsingDef
             )
         }?.let {
             return CqlReference(this)
         }
-
-       // LibraryDef, IncludeDef, UsingDef
-       findParentInFile {
-            val elType = it.node.elementType
-            elType is RuleIElementType && (elType.ruleIndex == cqlParser.RULE_qualifiedIdentifier)
-        }?.let {
-            return CqlReference(this)
-        }
-
-        //println("Found ${parent.parent.parent.parent}.${parent.parent.parent}.${parent.parent}.${parent}")
-        //println("Found $ref")
 
         return null
     }
