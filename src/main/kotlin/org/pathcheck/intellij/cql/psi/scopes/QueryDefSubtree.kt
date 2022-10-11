@@ -69,7 +69,7 @@ class QueryDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
         return listOfNotNull(
             LookupHelper.build(
                 getAliasName()?.cleanText(),
-                AllIcons.Nodes.Parameter,
+                AllIcons.Nodes.Variable,
                 null,
                 null
             )
