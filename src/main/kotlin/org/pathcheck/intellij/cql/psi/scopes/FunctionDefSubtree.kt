@@ -1,5 +1,7 @@
 package org.pathcheck.intellij.cql.psi.scopes
 
+import com.intellij.codeInsight.completion.util.ParenthesesInsertHandler
+import com.intellij.codeInsight.lookup.LookupElement
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.lang.ASTNode
@@ -51,14 +53,21 @@ class FunctionDefSubtree(node: ASTNode, idElementType: IElementType) : Identifie
         return XPath.findAll(CqlLanguage, this, "/functionDefinition/operandDefinition").toList()
     }
 
+    fun getParametersStr(): String {
+        return "(" + getFunctionParameters()?.joinToString(", ") { it.cleanText() } + ")"
+    }
+
     override fun lookup(): List<LookupElementBuilder> {
+        val functionName = getFunctionName() ?: return emptyList();
+
         return listOfNotNull(
-            LookupHelper.build(
-                getFunctionName()?.cleanText(),
-                AllIcons.Nodes.Function,
-                "(" + getFunctionParameters()?.joinToString(", ") { it.cleanText() } + ")",
-                null
-            )
+            LookupElementBuilder.create(functionName.cleanText())
+                .withTailText(getParametersStr(), true)
+                .withIcon(AllIcons.Nodes.Function)
+                .withInsertHandler { context, item ->
+                    ParenthesesInsertHandler.getInstance(getParametersStr().length > 2)
+                        .handleInsert(context, item)
+                }
         )
     }
 }
