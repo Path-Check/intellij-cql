@@ -80,12 +80,12 @@ class IncludeDefSubtree(node: ASTNode, idElementType: IElementType) : Identifier
             LookupHelper.build(
                 getLibraryName()?.cleanText(),
                 AllIcons.Nodes.Package,
-                getLibraryVersion()?.cleanText(),
+                getLibraryVersion()?.cleanText()?.let { ":$it" } ,
                 null),
             LookupHelper.build(
                 getLibraryLocalName()?.cleanText(),
                 AllIcons.Nodes.Package,
-                getLibraryVersion()?.cleanText(),
+                getLibraryVersion()?.cleanText()?.let { ":$it" } ,
                 null)
         )
     }

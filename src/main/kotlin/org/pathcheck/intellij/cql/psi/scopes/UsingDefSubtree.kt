@@ -84,12 +84,12 @@ class UsingDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
             LookupHelper.build(
                 getModelName()?.cleanText(),
                 AllIcons.Nodes.Package,
-                getModelVersion()?.cleanText(),
+                getModelVersion()?.cleanText()?.let { ":$it" } ,
                 null),
             LookupHelper.build(
                 getModelLocalName()?.cleanText(),
                 AllIcons.Nodes.Package,
-                getModelVersion()?.cleanText(),
+                getModelVersion()?.cleanText()?.let { ":$it" } ,
                 null)
         )
     }
