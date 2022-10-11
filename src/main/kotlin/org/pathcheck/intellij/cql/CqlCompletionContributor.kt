@@ -4,6 +4,9 @@ import com.intellij.codeInsight.completion.CompletionContributor
 import com.intellij.codeInsight.completion.CompletionType
 import com.intellij.patterns.PlatformPatterns
 import org.cqframework.cql.gen.cqlLexer
+import org.pathcheck.intellij.cql.completion.IdentifierCompletionProvider
+import org.pathcheck.intellij.cql.completion.KeywordCompletionProvider
+import org.pathcheck.intellij.cql.completion.ModelCompletionProvider
 
 class CqlCompletionContributor : CompletionContributor() {
     init {
@@ -11,13 +14,19 @@ class CqlCompletionContributor : CompletionContributor() {
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement(CqlTokenTypes.TOKEN_ELEMENT_TYPES[cqlLexer.IDENTIFIER]),
-            CqlKeywordCompletionProvider()
+            KeywordCompletionProvider()
         )
 
         extend(
             CompletionType.BASIC,
             PlatformPatterns.psiElement(CqlTokenTypes.TOKEN_ELEMENT_TYPES[cqlLexer.IDENTIFIER]),
-            CqlIdentifierCompletionProvider()
+            IdentifierCompletionProvider()
+        )
+
+        extend(
+            CompletionType.BASIC,
+            PlatformPatterns.psiElement(CqlTokenTypes.TOKEN_ELEMENT_TYPES[cqlLexer.IDENTIFIER]),
+            ModelCompletionProvider()
         )
     }
 }

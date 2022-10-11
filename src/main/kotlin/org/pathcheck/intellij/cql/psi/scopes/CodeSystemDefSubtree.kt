@@ -18,33 +18,31 @@ import org.pathcheck.intellij.cql.utils.cleanText
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
  */
-class ContextDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode, LookupProvider {
-    override fun resolve(element: PsiNamedElement): PsiElement? {
-        listOf(
-            "/contextDefinition/identifier/IDENTIFIER",
-            "/contextDefinition/identifier/DELIMITEDIDENTIFIER",
-            "/contextDefinition/identifier/QUOTEDIDENTIFIER",
-        ).mapNotNull {
-            XPath.findAll(CqlLanguage, this, it)
-        }.flatten().firstOrNull() {
-            it.text == element.name
-        }?.let {
-            return it.parent
-        }
+class CodeSystemDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType),
+    ScopeNode, LookupProvider {
 
+    override fun resolve(element: PsiNamedElement): PsiElement? {
         return context?.resolve(element)
     }
 
-    fun getContextName(): PsiElement? {
-        return XPath.findAll(CqlLanguage, this, "/contextDefinition/identifier").firstOrNull()
+    fun getCodeSystemName(): PsiElement? {
+        return XPath.findAll(CqlLanguage, this, "/codesystemDefinition/identifier").firstOrNull()
+    }
+
+    fun getCodeSystemID(): PsiElement? {
+        return XPath.findAll(CqlLanguage, this, "/codesystemDefinition/codesystemId").firstOrNull()
+    }
+
+    fun getCodeSystemVersion(): PsiElement? {
+        return XPath.findAll(CqlLanguage, this, "/codesystemDefinition/versionSpecifier").firstOrNull()
     }
 
     override fun lookup(): List<LookupElementBuilder> {
         return listOfNotNull(
             LookupHelper.build(
-                getContextName()?.cleanText(),
-                AllIcons.Nodes.Package,
-                null,
+                getCodeSystemName()?.cleanText(),
+                AllIcons.Nodes.Gvariable,
+                listOfNotNull(getCodeSystemID()?.cleanText(), getCodeSystemVersion()?.cleanText()).joinToString(" - "),
                 null
             )
         )

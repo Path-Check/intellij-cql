@@ -112,13 +112,27 @@ class CqlParserDefinition : ParserDefinition {
 
         return when (elType.ruleIndex) {
             // scope targets
+            cqlParser.RULE_libraryDefinition -> LibraryDefSubtree(node, elType)
+
+            // Includes and uses
+            cqlParser.RULE_includeDefinition -> IncludeDefSubtree(node, elType)
+            cqlParser.RULE_usingDefinition -> UsingDefSubtree(node, elType)
+
+            cqlParser.RULE_parameterDefinition -> ParameterDefSubtree(node, elType)
+            cqlParser.RULE_codesystemDefinition -> CodeSystemDefSubtree(node, elType)
+            cqlParser.RULE_codeDefinition -> CodeDefSubtree(node, elType)
+            cqlParser.RULE_valuesetDefinition -> ValueSetDefSubtree(node, elType)
+            cqlParser.RULE_conceptDefinition -> ConceptDefSubtree(node, elType)
+
+            // Functions, Expressions and Contexts
             cqlParser.RULE_functionDefinition -> FunctionDefSubtree(node, elType)
+            cqlParser.RULE_expressionDefinition -> ExpressionDefSubtree(node, elType)
+            cqlParser.RULE_contextDefinition -> ContextDefSubtree(node, elType)
+
+            // Scopes
             cqlParser.RULE_aggregateClause -> AggregateClauseDefSubtree(node, elType)
             cqlParser.RULE_query -> QueryDefSubtree(node, elType)
-            cqlParser.RULE_includeDefinition -> IncludeDefSubtree(node, elType)
-            cqlParser.RULE_libraryDefinition -> LibraryDefSubtree(node, elType)
             cqlParser.RULE_qualifiedInvocation -> QualifiedInvocationSubtree(node, elType)
-            cqlParser.RULE_contextDefinition -> ContextDefSubtree(node, elType)
 
             else -> ANTLRPsiNode(node)
         }

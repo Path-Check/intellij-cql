@@ -18,32 +18,22 @@ import org.pathcheck.intellij.cql.utils.cleanText
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
  */
-class ContextDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode, LookupProvider {
-    override fun resolve(element: PsiNamedElement): PsiElement? {
-        listOf(
-            "/contextDefinition/identifier/IDENTIFIER",
-            "/contextDefinition/identifier/DELIMITEDIDENTIFIER",
-            "/contextDefinition/identifier/QUOTEDIDENTIFIER",
-        ).mapNotNull {
-            XPath.findAll(CqlLanguage, this, it)
-        }.flatten().firstOrNull() {
-            it.text == element.name
-        }?.let {
-            return it.parent
-        }
+class ConceptDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType),
+    ScopeNode, LookupProvider {
 
+    override fun resolve(element: PsiNamedElement): PsiElement? {
         return context?.resolve(element)
     }
 
-    fun getContextName(): PsiElement? {
-        return XPath.findAll(CqlLanguage, this, "/contextDefinition/identifier").firstOrNull()
+    fun getConceptName(): PsiElement? {
+        return XPath.findAll(CqlLanguage, this, "/conceptDefinition/identifier").firstOrNull()
     }
 
     override fun lookup(): List<LookupElementBuilder> {
         return listOfNotNull(
             LookupHelper.build(
-                getContextName()?.cleanText(),
-                AllIcons.Nodes.Package,
+                getConceptName()?.cleanText(),
+                AllIcons.Nodes.Gvariable,
                 null,
                 null
             )

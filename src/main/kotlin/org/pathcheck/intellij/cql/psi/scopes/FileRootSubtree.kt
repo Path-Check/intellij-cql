@@ -1,20 +1,24 @@
 package org.pathcheck.intellij.cql.psi.scopes
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
-import org.antlr.intellij.adaptor.SymtabUtils
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.antlr.intellij.adaptor.xpath.XPath
+import org.cqframework.cql.cql2elm.model.Model
 import org.pathcheck.intellij.cql.CqlFileType
 import org.pathcheck.intellij.cql.CqlIcons
 import org.pathcheck.intellij.cql.CqlLanguage
+import org.pathcheck.intellij.cql.psi.DeclaringIdentifiers
+import org.pathcheck.intellij.cql.psi.LookupProvider
 import javax.swing.Icon
 
 
-class FileRootSubtree(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, CqlLanguage), ScopeNode {
+class FileRootSubtree(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, CqlLanguage), ScopeNode,
+    DeclaringIdentifiers, LookupProvider {
     override fun getFileType(): FileType {
         return CqlFileType
     }
@@ -36,7 +40,17 @@ class FileRootSubtree(viewProvider: FileViewProvider) : PsiFileBase(viewProvider
      * Looks for identifiers that match the declaration of the element.
      */
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        listOf(
+        visibleIdentifiers().firstOrNull() {
+            it.text == element.text
+        }?.let {
+            return it.parent
+        }
+
+        return null
+    }
+
+    override fun visibleIdentifiers(): List<PsiElement> {
+        return listOf(
             "/library/statement/functionDefinition/identifierOrFunctionIdentifier/identifier",
             "/library/statement/functionDefinition/identifierOrFunctionIdentifier/functionIdentifier",
             "/library/statement/expressionDefinition/identifier",
@@ -61,12 +75,45 @@ class FileRootSubtree(viewProvider: FileViewProvider) : PsiFileBase(viewProvider
                 listOf(it)
         }.flatten().mapNotNull {
             XPath.findAll(CqlLanguage, this, it)
-        }.flatten().firstOrNull() {
-            it.text == element.text
-        }?.let {
-            return it.parent
-        }
+        }.flatten()
+    }
 
-        return null
+    override fun lookup(): List<LookupElementBuilder> {
+        return listOf(
+            "/library/definition/usingDefinition",
+            "/library/definition/includeDefinition",
+            "/library/definition/codesystemDefinition",
+            "/library/definition/valuesetDefinition",
+            "/library/definition/codeDefinition",
+            "/library/definition/conceptDefinition",
+            "/library/definition/parameterDefinition",
+
+            "/library/statement/functionDefinition",
+            "/library/statement/expressionDefinition",
+            "/library/statement/contextDefinition"
+        ).mapNotNull {
+            XPath.findAll(CqlLanguage, this, it)
+        }.flatten()
+        .map {
+            (it as LookupProvider).lookup()
+        }.flatten()
+    }
+
+    fun exportingLookups(): List<LookupElementBuilder> {
+        return listOf(
+            "/library/statement/functionDefinition",
+            "/library/statement/expressionDefinition"
+        ).mapNotNull {
+            XPath.findAll(CqlLanguage, this, it)
+        }.flatten()
+        .map {
+            (it as LookupProvider).lookup()
+        }.flatten()
+    }
+
+    fun findModels(): List<Model> {
+        return XPath.findAll(CqlLanguage, this, "/library/definition/usingDefinition").mapNotNull {
+            (it as UsingDefSubtree).getModel()
+        }
     }
 }

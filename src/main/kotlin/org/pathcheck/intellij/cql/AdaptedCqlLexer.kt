@@ -34,7 +34,7 @@ class AdaptedCqlLexer(input: CharStream?): cqlLexer(input) {
                     } catch (e: LexerNoViableAltException) {
                         notifyListeners(e) // report error
                         recover(e)
-                        Lexer.HIDDEN
+                        Lexer.HIDDEN // <------- This was SKIP before
                     }
                     if (_input.LA(1) == IntStream.EOF) {
                         _hitEOF = true

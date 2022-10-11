@@ -31,6 +31,16 @@ class QualifiedInvocationSubtree(node: ASTNode, idElementType: IElementType) : I
             return context?.resolve(element)
         }
 
+        val qualifierDefinitionScope = getQualifierDefScope()
+
+        if (qualifierDefinitionScope is IncludeDefSubtree) {
+            return qualifierDefinitionScope.resolveInLinkedLibrary(element)
+        }
+
+        return qualifierDefinitionScope?.resolve(element)
+    }
+
+    fun getQualifierDefScope(): ScopeNode? {
         val qualifierOfThisElement = listOf(
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/IDENTIFIER",
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/DELIMITEDIDENTIFIER",
@@ -39,12 +49,6 @@ class QualifiedInvocationSubtree(node: ASTNode, idElementType: IElementType) : I
             XPath.findAll(CqlLanguage, this.parent, it)
         }.flatten().firstOrNull()
 
-        val qualifierDefinitionScope = qualifierOfThisElement?.reference?.resolve()?.context as? ScopeNode
-
-        if (qualifierDefinitionScope is IncludeDefSubtree) {
-            return qualifierDefinitionScope.resolveInLinkedLibrary(element)
-        }
-
-        return qualifierDefinitionScope?.resolve(element)
+        return qualifierOfThisElement?.reference?.resolve()?.context as? ScopeNode
     }
 }
