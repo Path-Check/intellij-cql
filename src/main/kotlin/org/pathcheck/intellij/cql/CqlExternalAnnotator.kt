@@ -8,12 +8,8 @@ import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
 import org.cqframework.cql.cql2elm.CqlCompiler
 import org.cqframework.cql.cql2elm.CqlCompilerException
-import org.cqframework.cql.cql2elm.LibraryManager
-import org.cqframework.cql.cql2elm.ModelManager
 import org.cqframework.cql.elm.tracking.TrackBack
 import org.hl7.elm.r1.Library
-import org.pathcheck.intellij.cql.psi.scopes.FileRootSubtree
-import org.pathcheck.intellij.cql.psi.scopes.UsingDefSubtree
 import java.io.IOException
 
 class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerException>?>() {

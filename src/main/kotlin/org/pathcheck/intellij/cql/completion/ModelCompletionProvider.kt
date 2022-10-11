@@ -7,8 +7,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.util.ProcessingContext
 import org.hl7.cql.model.DataType
-import org.pathcheck.intellij.cql.CqlTokenTypes
-import org.pathcheck.intellij.cql.GlobalCache
 import org.pathcheck.intellij.cql.psi.scopes.FileRootSubtree
 import org.pathcheck.intellij.cql.utils.getPrivateProperty
 

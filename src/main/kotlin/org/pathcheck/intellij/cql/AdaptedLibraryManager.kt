@@ -1,6 +1,8 @@
 package org.pathcheck.intellij.cql
 
-import org.cqframework.cql.cql2elm.*
+import org.cqframework.cql.cql2elm.CqlCompilerException
+import org.cqframework.cql.cql2elm.CqlTranslatorOptions
+import org.cqframework.cql.cql2elm.LibraryManager
 import org.cqframework.cql.cql2elm.model.CompiledLibrary
 import org.hl7.elm.r1.VersionedIdentifier
 

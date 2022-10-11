@@ -11,7 +11,6 @@ import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.antlr.intellij.adaptor.xpath.XPath
 import org.hl7.cql.model.NamespaceManager
-import org.hl7.elm.r1.FunctionDef
 import org.hl7.elm.r1.Library
 import org.hl7.elm.r1.VersionedIdentifier
 import org.pathcheck.intellij.cql.CqlLanguage
