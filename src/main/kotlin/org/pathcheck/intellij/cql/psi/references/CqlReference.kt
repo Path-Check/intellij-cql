@@ -24,6 +24,7 @@ class CqlReference(element: IdentifierPSINode) :
         val scope = element.context
         if (scope is QualifiedInvocationSubtree) {
             val definition = scope.getQualifierDefScope()
+            println(definition)
             if (definition is ReferenceLookupProvider) {
                 return definition.expandLookup().toTypedArray()
             }
