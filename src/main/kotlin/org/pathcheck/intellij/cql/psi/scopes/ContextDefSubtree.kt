@@ -54,8 +54,7 @@ class ContextDefSubtree(node: ASTNode, idElementType: IElementType) : Identifier
         val contextName = getContextName() ?: return emptyList()
 
         return (containingFile as FileRootSubtree).findModels().map {
-            val test = it.resolveLabel(contextName.text)
-            test.elements.map {
+            it.resolveLabel(contextName.text).elements.map {
                 LookupElementBuilder.create(it.name)
                     .withTypeText(it.type.toLabel(), true)
                     .withIcon(AllIcons.Nodes.Field)
