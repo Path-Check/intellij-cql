@@ -1,5 +1,6 @@
 package org.pathcheck.intellij.cql.psi.scopes
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
@@ -8,11 +9,12 @@ import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.antlr.intellij.adaptor.xpath.XPath
 import org.pathcheck.intellij.cql.CqlLanguage
+import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
 
 /** A subtree associated with a function definition.
  * Its scope is the set of arguments.
  */
-class QualifiedInvocationSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode {
+class QualifiedInvocationSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode, ReferenceLookupProvider {
     override fun resolve(element: PsiNamedElement): PsiElement? {
         val member = listOf(
             "/qualifiedInvocation/referentialIdentifier/identifier/IDENTIFIER",
@@ -40,15 +42,25 @@ class QualifiedInvocationSubtree(node: ASTNode, idElementType: IElementType) : I
         return qualifierDefinitionScope?.resolve(element)
     }
 
-    fun getQualifierDefScope(): ScopeNode? {
-        val qualifierOfThisElement = listOf(
+    fun getQualifier(): PsiElement? {
+        return listOf(
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/IDENTIFIER",
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/DELIMITEDIDENTIFIER",
             "/expressionTerm/expressionTerm/term/invocation/referentialIdentifier/identifier/QUOTEDIDENTIFIER"
         ).mapNotNull {
             XPath.findAll(CqlLanguage, this.parent, it)
         }.flatten().firstOrNull()
+    }
 
-        return qualifierOfThisElement?.reference?.resolve()?.context as? ScopeNode
+    fun getQualifierDefScope(): ScopeNode? {
+        return getQualifier()?.reference?.resolve()?.context as? ScopeNode
+    }
+
+    override fun expandLookup(): List<LookupElementBuilder> {
+        val definition = getQualifierDefScope()
+        if (definition is ReferenceLookupProvider) {
+            return definition.expandLookup()
+        }
+        return emptyList()
     }
 }

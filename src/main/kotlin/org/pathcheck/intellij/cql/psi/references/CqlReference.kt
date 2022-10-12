@@ -6,7 +6,6 @@ import com.intellij.psi.PsiReferenceBase
 import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
-import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
 import org.pathcheck.intellij.cql.psi.scopes.QualifiedInvocationSubtree
 
 /**
@@ -18,11 +17,7 @@ class CqlReference(element: IdentifierPSINode) :
     override fun getVariants(): Array<Any> {
         val scope = element.context
         if (scope is QualifiedInvocationSubtree) {
-            val definition = scope.getQualifierDefScope()
-            println(definition)
-            if (definition is ReferenceLookupProvider) {
-                return definition.expandLookup().toTypedArray()
-            }
+            return scope.expandLookup().toTypedArray()
         }
 
         return emptyArray()
