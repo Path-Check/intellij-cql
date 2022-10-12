@@ -11,13 +11,14 @@ import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.antlr.intellij.adaptor.xpath.XPath
 import org.pathcheck.intellij.cql.CqlLanguage
 import org.pathcheck.intellij.cql.psi.LookupProvider
+import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
  */
-class ContextDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode, LookupProvider {
+class ContextDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode, LookupProvider, ReferenceLookupProvider {
     override fun resolve(element: PsiNamedElement): PsiElement? {
         listOf(
             "/contextDefinition/identifier/IDENTIFIER",
@@ -47,5 +48,18 @@ class ContextDefSubtree(node: ASTNode, idElementType: IElementType) : Identifier
                 null
             )
         )
+    }
+
+    override fun expandLookup(): List<LookupElementBuilder> {
+        val contextName = getContextName() ?: return emptyList()
+
+        return (containingFile as FileRootSubtree).findModels().map {
+            val test = it.resolveLabel(contextName.text)
+            test.elements.map {
+                LookupElementBuilder.create(it.name)
+                    .withTypeText(it.type.toLabel(), true)
+                    .withIcon(AllIcons.Nodes.Field)
+            }
+        }.flatten()
     }
 }
