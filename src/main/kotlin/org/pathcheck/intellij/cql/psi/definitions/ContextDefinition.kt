@@ -46,10 +46,10 @@ class ContextDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupPro
     }
 
     override fun expandLookup(): List<LookupElementBuilder> {
-        val contextName = identifier() ?: return emptyList()
+        val labelName = identifier() ?: return emptyList()
 
-        return (parent.parent as Library).findModels().map { model ->
-            model.resolveLabel(contextName.text).elements.map {
+        return (parent.parent as Library).findModels().mapNotNull { model ->
+            model.resolveLabel(labelName.text)?.elements?.map {
                 LookupElementBuilder.create(it.name)
                     .withTypeText(it.type.toLabel(), true)
                     .withIcon(AllIcons.Nodes.Field)

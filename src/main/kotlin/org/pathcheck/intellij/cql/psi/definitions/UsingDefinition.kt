@@ -7,6 +7,7 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.cqframework.cql.cql2elm.model.Model
+import org.hl7.cql.model.ClassType
 import org.hl7.cql.model.DataType
 import org.hl7.cql.model.ModelIdentifier
 import org.pathcheck.intellij.cql.elm.GlobalCache
@@ -46,9 +47,7 @@ class UsingDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvi
     fun getModelTypes(): Map<String, DataType> {
         val model = getModel()?: return emptyMap()
 
-        val mapNames = model.getPrivateProperty("nameIndex") as Map<String, DataType>
-        val mapClasses = model.getPrivateProperty("classIndex") as Map<String, DataType>
-        return (mapNames + mapClasses)
+        return model.getPrivateProperty("index") as Map<String, DataType>
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {
@@ -63,9 +62,16 @@ class UsingDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvi
 
     override fun expandLookup(): List<LookupElementBuilder> {
         return getModelTypes().map {
-            LookupElementBuilder.create(it.key)
-                .withTypeText(it.value.toLabel(), true)
-                .withIcon(AllIcons.Nodes.Type)
+            val type = it.value
+            if (type is ClassType) {
+                LookupElementBuilder.create(type.simpleName)
+                    .withTypeText(type.name, true)
+                    .withIcon(AllIcons.Nodes.Type)
+            } else {
+                LookupElementBuilder.create(type)
+                    .withTypeText(type.toString(), true)
+                    .withIcon(AllIcons.Nodes.Type)
+            }
         }
     }
 
