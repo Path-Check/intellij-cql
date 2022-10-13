@@ -1,21 +1,19 @@
-package org.pathcheck.intellij.cql.psi.scopes
+package org.pathcheck.intellij.cql.psi.definitions
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
-import com.intellij.psi.tree.IElementType
-import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import org.antlr.intellij.adaptor.xpath.XPath
 import org.cqframework.cql.cql2elm.model.Model
 import org.hl7.cql.model.DataType
 import org.hl7.cql.model.ModelIdentifier
-import org.pathcheck.intellij.cql.CqlLanguage
-import org.pathcheck.intellij.cql.GlobalCache
+import org.pathcheck.intellij.cql.elm.GlobalCache
 import org.pathcheck.intellij.cql.psi.LookupProvider
 import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
+import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
+import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 import org.pathcheck.intellij.cql.utils.getPrivateProperty
@@ -23,8 +21,19 @@ import org.pathcheck.intellij.cql.utils.getPrivateProperty
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
  */
-class UsingDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode, LookupProvider,
-    ReferenceLookupProvider {
+class UsingDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvider, ReferenceLookupProvider {
+
+    fun qualifiedIdentifier(): PsiContextNodes.QualifiedIdentifier? {
+        return getRule(PsiContextNodes.QualifiedIdentifier::class.java, 0)
+    }
+
+    fun versionSpecifier(): PsiContextNodes.VersionSpecifier? {
+        return getRule(PsiContextNodes.VersionSpecifier::class.java, 0)
+    }
+
+    fun localIdentifier(): PsiContextNodes.LocalIdentifier? {
+        return getRule(PsiContextNodes.LocalIdentifier::class.java, 0)
+    }
 
     fun getModel(): Model? {
         return try {
@@ -46,23 +55,10 @@ class UsingDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
         return context?.resolve(element)
     }
 
-    private fun getModelName(): PsiElement? {
-        return XPath.findAll(CqlLanguage, this, "/usingDefinition/qualifiedIdentifier/identifier").firstOrNull()
-    }
-
-    private fun getModelLocalName(): PsiElement? {
-        return XPath.findAll(CqlLanguage, this, "/usingDefinition/localIdentifier/identifier").firstOrNull()
-    }
-
-
-    private fun getModelVersion(): PsiElement? {
-        return XPath.findAll(CqlLanguage, this, "/usingDefinition/versionSpecifier").firstOrNull()
-    }
-
     private fun getModelIdentifier(): ModelIdentifier {
         return ModelIdentifier()
-            .withId(getModelName()?.cleanText())
-            .withVersion(getModelVersion()?.cleanText())
+            .withId(qualifiedIdentifier()?.cleanText())
+            .withVersion(versionSpecifier()?.cleanText())
     }
 
     override fun expandLookup(): List<LookupElementBuilder> {
@@ -76,14 +72,14 @@ class UsingDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDe
     override fun lookup(): List<LookupElementBuilder> {
         return listOfNotNull(
             LookupHelper.build(
-                getModelName()?.cleanText(),
+                qualifiedIdentifier()?.cleanText(),
                 AllIcons.Nodes.Package,
-                getModelVersion()?.cleanText()?.let { ":$it" } ,
+                versionSpecifier()?.cleanText()?.let { ":$it" } ,
                 null),
             LookupHelper.build(
-                getModelLocalName()?.cleanText(),
+                localIdentifier()?.cleanText(),
                 AllIcons.Nodes.Package,
-                getModelVersion()?.cleanText()?.let { ":$it" } ,
+                versionSpecifier()?.cleanText()?.let { ":$it" } ,
                 null)
         )
     }

@@ -1,23 +1,22 @@
-package org.pathcheck.intellij.cql.psi.scopes
+package org.pathcheck.intellij.cql.psi.definitions
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
-import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.PsiTreeUtil
-import org.antlr.intellij.adaptor.psi.IdentifierDefSubtree
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import org.antlr.intellij.adaptor.xpath.XPath
 import org.hl7.cql.model.NamespaceManager
 import org.hl7.elm.r1.Library
 import org.hl7.elm.r1.VersionedIdentifier
-import org.pathcheck.intellij.cql.CqlLanguage
-import org.pathcheck.intellij.cql.GlobalCache
-import org.pathcheck.intellij.cql.PsiDirectoryLibrarySourceProvider
+import org.pathcheck.intellij.cql.elm.GlobalCache
+import org.pathcheck.intellij.cql.elm.PsiDirectoryLibrarySourceProvider
 import org.pathcheck.intellij.cql.psi.LookupProvider
 import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
+import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
+import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
+import org.pathcheck.intellij.cql.psi.CqlFileRoot
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 import org.pathcheck.intellij.cql.utils.exportingLookups
@@ -25,12 +24,23 @@ import org.pathcheck.intellij.cql.utils.exportingLookups
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
  */
-class IncludeDefSubtree(node: ASTNode, idElementType: IElementType) : IdentifierDefSubtree(node, idElementType), ScopeNode, LookupProvider,
-    ReferenceLookupProvider {
+class IncludeDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvider, ReferenceLookupProvider {
+
+    fun qualifiedIdentifier(): PsiContextNodes.QualifiedIdentifier? {
+        return getRule(PsiContextNodes.QualifiedIdentifier::class.java, 0)
+    }
+
+    fun versionSpecifier(): PsiContextNodes.VersionSpecifier? {
+        return getRule(PsiContextNodes.VersionSpecifier::class.java, 0)
+    }
+
+    fun localIdentifier(): PsiContextNodes.LocalIdentifier? {
+        return getRule(PsiContextNodes.LocalIdentifier::class.java, 0)
+    }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {
         // Clicks on the includeDefinition always point to the libraryDefinition in the linked filed.
-        return PsiTreeUtil.findChildOfType(getLinkedLocalLibrary(), LibraryDefSubtree::class.java)?.getLibraryNameElement()
+        return PsiTreeUtil.findChildOfType(getLinkedLocalLibrary(), LibraryDefinition::class.java)?.qualifiedIdentifier()
     }
 
     fun resolveInLinkedLibrary(element: PsiNamedElement): PsiElement? {
@@ -44,27 +54,21 @@ class IncludeDefSubtree(node: ASTNode, idElementType: IElementType) : Identifier
         return GlobalCache.libraryManager.compiledLibraries[libraryPath]?.library
     }
 
-    private fun getLinkedLocalLibrary(): FileRootSubtree? {
-        return PsiDirectoryLibrarySourceProvider(containingFile.originalFile.containingDirectory)
-            .getLibrarySourceFile(getVersionIdentifier()) as? FileRootSubtree
-    }
+    private fun getLinkedLocalLibrary(): org.pathcheck.intellij.cql.psi.Library? {
+        val file = PsiDirectoryLibrarySourceProvider(containingFile.originalFile.containingDirectory)
+            .getLibrarySourceFile(getVersionIdentifier())
 
-    private fun getLibraryName(): PsiElement? {
-        return XPath.findAll(CqlLanguage, this, "/includeDefinition/qualifiedIdentifier/identifier").firstOrNull()
-    }
+        if (file is CqlFileRoot) {
+            return file.library()
+        }
 
-    private fun getLibraryLocalName(): PsiElement? {
-        return XPath.findAll(CqlLanguage, this, "/includeDefinition/localIdentifier/identifier").firstOrNull()
-    }
-
-    private fun getLibraryVersion(): PsiElement? {
-        return XPath.findAll(CqlLanguage, this, "/includeDefinition/versionSpecifier").firstOrNull()
+        return null
     }
 
     private fun getVersionIdentifier(): VersionedIdentifier {
         return VersionedIdentifier()
-            .withId(getLibraryName()?.cleanText())
-            .withVersion(getLibraryVersion()?.cleanText())
+            .withId(qualifiedIdentifier()?.cleanText())
+            .withVersion(versionSpecifier()?.cleanText())
     }
 
     override fun expandLookup(): List<LookupElementBuilder> {
@@ -77,14 +81,14 @@ class IncludeDefSubtree(node: ASTNode, idElementType: IElementType) : Identifier
     override fun lookup(): List<LookupElementBuilder> {
         return listOfNotNull(
             LookupHelper.build(
-                getLibraryName()?.cleanText(),
+                qualifiedIdentifier()?.identifier()?.any()?.cleanText(),
                 AllIcons.Nodes.Package,
-                getLibraryVersion()?.cleanText()?.let { ":$it" } ,
+                versionSpecifier()?.cleanText()?.let { ":$it" } ,
                 null),
             LookupHelper.build(
-                getLibraryLocalName()?.cleanText(),
+                localIdentifier()?.identifier()?.any()?.cleanText(),
                 AllIcons.Nodes.Package,
-                getLibraryVersion()?.cleanText()?.let { ":$it" } ,
+                versionSpecifier()?.cleanText()?.let { ":$it" } ,
                 null)
         )
     }

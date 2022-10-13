@@ -1,4 +1,4 @@
-package org.pathcheck.intellij.cql
+package org.pathcheck.intellij.cql.parser
 
 import org.antlr.v4.runtime.*
 import org.cqframework.cql.gen.cqlLexer

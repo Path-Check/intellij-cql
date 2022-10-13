@@ -18,7 +18,7 @@
                 language="Cql"
                 implementationClass="org.pathcheck.intellij.cql.CqlSyntaxHighlighterFactory"/>
 
-        <lang.parserDefinition language="Cql" implementationClass="org.pathcheck.intellij.cql.CqlParserDefinition"/>
+        <lang.parserDefinition language="Cql" implementationClass="org.pathcheck.intellij.cql.parser.CqlParserDefinition"/>
 
         <colorSettingsPage
                 implementation="org.pathcheck.intellij.cql.CqlColorSettingsPage"/>
@@ -27,16 +27,16 @@
 
         <externalAnnotator
                 language="Cql"
-                implementationClass="org.pathcheck.intellij.cql.CqlExternalAnnotator"/>
+                implementationClass="org.pathcheck.intellij.cql.elm.CqlExternalAnnotator"/>
 
         <completion.contributor
                 language="Cql"
-                implementationClass="org.pathcheck.intellij.cql.CqlCompletionContributor"/>
+                implementationClass="org.pathcheck.intellij.cql.completion.CqlCompletionContributor"/>
 
         <lang.foldingBuilder language="Cql"
                              implementationClass="org.pathcheck.intellij.cql.CqlFoldingBuilder"/>
 
-        <lang.ast.factory language="Cql" implementationClass="org.pathcheck.intellij.cql.CqlASTFactory"/>
+        <lang.ast.factory language="Cql" implementationClass="org.pathcheck.intellij.cql.parser.CqlASTFactory"/>
 
         <lang.findUsagesProvider language="Cql"
                                  implementationClass="org.pathcheck.intellij.cql.CqlFindUsagesProvider"/>

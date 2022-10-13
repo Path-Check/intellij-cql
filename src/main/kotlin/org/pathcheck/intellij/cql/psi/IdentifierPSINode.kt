@@ -6,11 +6,10 @@ import com.intellij.psi.PsiReference
 import com.intellij.psi.tree.IElementType
 import com.intellij.psi.util.findParentInFile
 import com.intellij.util.IncorrectOperationException
-import org.antlr.intellij.adaptor.lexer.RuleIElementType
 import org.antlr.intellij.adaptor.psi.ANTLRPsiLeafNode
 import org.antlr.intellij.adaptor.psi.Trees
-import org.cqframework.cql.gen.cqlParser
 import org.pathcheck.intellij.cql.CqlLanguage
+import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
 import org.pathcheck.intellij.cql.psi.references.CqlReference
 
 /** From doc: "Every element which can be renamed or referenced
@@ -71,13 +70,10 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
      */
     override fun getReference(): PsiReference? {
         findParentInFile {
-            val elType = it.node.elementType
-            elType is RuleIElementType && (
-                     elType.ruleIndex == cqlParser.RULE_invocation
-                  || elType.ruleIndex == cqlParser.RULE_qualifiedInvocation
-                  || elType.ruleIndex == cqlParser.RULE_qualifiedIdentifierExpression // QuerySource from variable
-                  || elType.ruleIndex == cqlParser.RULE_qualifiedIdentifier // LibraryDef, IncludeDef, UsingDef
-            )
+                     it is PsiContextNodes.Invocation
+                  || it is PsiContextNodes.QualifiedInvocation
+                  || it is PsiContextNodes.QualifiedIdentifierExpression // QuerySource from variable
+                  || it is PsiContextNodes.QualifiedIdentifier // LibraryDef, IncludeDef, UsingDef
         }?.let {
             return CqlReference(this)
         }

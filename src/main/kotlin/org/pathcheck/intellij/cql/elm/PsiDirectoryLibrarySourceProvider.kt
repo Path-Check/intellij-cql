@@ -1,4 +1,4 @@
-package org.pathcheck.intellij.cql
+package org.pathcheck.intellij.cql.elm
 
 import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile

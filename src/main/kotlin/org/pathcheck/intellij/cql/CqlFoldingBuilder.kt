@@ -8,20 +8,21 @@ import com.intellij.openapi.editor.FoldingGroup
 import com.intellij.openapi.project.DumbAware
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
-import org.antlr.intellij.adaptor.xpath.XPath
+import org.pathcheck.intellij.cql.psi.CqlFileRoot
 
 class CqlFoldingBuilder : FoldingBuilderEx(), DumbAware {
     override fun buildFoldRegions(root: PsiElement, document: Document, quick: Boolean): Array<FoldingDescriptor> {
         var i=0
 
-        return listOf(
-                "/library/statement/functionDefinition/functionBody",
-                "/library/statement/expressionDefinition/expression"
-            )
-            .map { XPath.findAll(CqlLanguage, root, it) }
-            .flatten()
-            .filter { it.textRange.endOffset > it.textRange.startOffset } // define "": causes this exception 
-            .map {
+        if (root is CqlFileRoot) {
+            return root.library()?.statement()?.map {
+                listOfNotNull(
+                    it.functionDefinition()?.functionBody(),
+                    it.expressionDefinition()?.expression()
+                )
+            }?.flatten()
+            ?.filter { it.textRange.endOffset > it.textRange.startOffset } // define "": causes this exception
+            ?.map {
                 FoldingDescriptor(
                     it.node,
                     TextRange(
@@ -31,7 +32,10 @@ class CqlFoldingBuilder : FoldingBuilderEx(), DumbAware {
                     FoldingGroup.newGroup(i++.toString()),
                     "..."
                 )
-            }.toTypedArray()
+            }?.toTypedArray() ?: emptyArray()
+        }
+
+        return emptyArray()
     }
 
     override fun getPlaceholderText(node: ASTNode): String? {

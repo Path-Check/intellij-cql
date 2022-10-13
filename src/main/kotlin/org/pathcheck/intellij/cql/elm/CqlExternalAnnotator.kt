@@ -1,4 +1,4 @@
-package org.pathcheck.intellij.cql
+package org.pathcheck.intellij.cql.elm
 
 import com.intellij.lang.annotation.AnnotationHolder
 import com.intellij.lang.annotation.ExternalAnnotator

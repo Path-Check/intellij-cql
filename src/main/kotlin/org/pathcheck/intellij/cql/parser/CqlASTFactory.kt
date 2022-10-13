@@ -1,10 +1,11 @@
-package org.pathcheck.intellij.cql
+package org.pathcheck.intellij.cql.parser
 
 import com.intellij.lang.DefaultASTFactoryImpl
 import com.intellij.psi.impl.source.tree.LeafElement
 import com.intellij.psi.tree.IElementType
 import org.antlr.intellij.adaptor.lexer.TokenIElementType
 import org.cqframework.cql.gen.cqlLexer
+import org.pathcheck.intellij.cql.CqlTokenTypes
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
 
 /** How to create parse tree nodes (Jetbrains calls them AST nodes). Later

@@ -6,7 +6,7 @@ import com.intellij.psi.PsiReferenceBase
 import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
-import org.pathcheck.intellij.cql.psi.scopes.QualifiedInvocationSubtree
+import org.pathcheck.intellij.cql.psi.scopes.QualifiedMemberInvocation
 
 /**
  * Represents any resolvable identifier in the editor
@@ -16,7 +16,7 @@ class CqlReference(element: IdentifierPSINode) :
 
     override fun getVariants(): Array<Any> {
         val scope = element.context
-        if (scope is QualifiedInvocationSubtree) {
+        if (scope is QualifiedMemberInvocation) {
             return scope.expandLookup().toTypedArray()
         }
 

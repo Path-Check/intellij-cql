@@ -10,6 +10,8 @@ import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory
 import org.antlr.intellij.adaptor.lexer.TokenIElementType
 import org.cqframework.cql.gen.cqlLexer
 import org.cqframework.cql.gen.cqlParser
+import org.pathcheck.intellij.cql.parser.AdaptedCqlLexer
+import org.pathcheck.intellij.cql.parser.CqlRuleTypes
 
 /** A highlighter is really just a mapping from token type to
  * some text attributes using [.getTokenHighlights].
@@ -231,11 +233,15 @@ class CqlSyntaxHighlighter : SyntaxHighlighterBase() {
         val PARENTHESES = TextAttributesKey.createTextAttributesKey("CQL_PARENTHESES", DefaultLanguageHighlighterColors.PARENTHESES)
         val FUNCTION_CALL = TextAttributesKey.createTextAttributesKey("CQL_FUNCTION_CALL", DefaultLanguageHighlighterColors.FUNCTION_CALL)
         val FUNCTION_DECLARATION = TextAttributesKey.createTextAttributesKey("CQL_FUNCTION_DECLARATION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
+
         init {
+            /**
+             * Includes subclasses of rules
+             */
             PSIElementTypeFactory.defineLanguageIElementTypes(
                 CqlLanguage,
                 cqlParser.tokenNames,
-                cqlParser.ruleNames
+                CqlRuleTypes.RULE_NAMES
             )
         }
     }

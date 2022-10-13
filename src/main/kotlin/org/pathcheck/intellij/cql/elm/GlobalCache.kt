@@ -1,4 +1,4 @@
-package org.pathcheck.intellij.cql
+package org.pathcheck.intellij.cql.elm
 
 import org.cqframework.cql.cql2elm.LibraryManager
 import org.cqframework.cql.cql2elm.ModelManager
