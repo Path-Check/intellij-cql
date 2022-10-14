@@ -29,11 +29,7 @@ class TypeSpecifier(node: ASTNode) : BasePsiNode(node), IsResultType {
         return getRule(ChoiceTypeSpecifier::class.java, 0)
     }
 
-    override fun resolveType(): DataType? {
-        val dataType = (any() as? IsResultType)?.resolveType()
-        println("${any()?.text} $dataType ${any()?.javaClass}")
-        return (any() as? IsResultType)?.resolveType()
-    }
+    override fun resolveType() = (any() as? IsResultType)?.resolveType()
 }
 
 class NamedTypeSpecifier(node: ASTNode) : BasePsiNode(node), IsResultType {
@@ -53,7 +49,6 @@ class NamedTypeSpecifier(node: ASTNode) : BasePsiNode(node), IsResultType {
     // To: modelIdentifier  (qualifier '.')* referentialOrTypeNameIdentifier
     // if modelIdentifier is null, loops through all models
     override fun resolveType(): DataType? {
-        println("Named Type ${referentialOrTypeNameIdentifier()?.text}")
         val identifier = referentialOrTypeNameIdentifier()?.text ?: return null
         return if (qualifier().isNullOrEmpty()) {
             resolveTypeName(null, identifier)

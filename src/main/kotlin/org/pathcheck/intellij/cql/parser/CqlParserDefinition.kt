@@ -357,7 +357,7 @@ class CqlParserDefinition : ParserDefinition {
             "FunctionIdentifier" -> FunctionIdentifier(node)
             "TypeNameIdentifier" -> TypeNameIdentifier(node)
             else -> {
-                println("Couldn't instantiate custom Antlr context ${CqlRuleTypes.RULE_NAMES[elType.ruleIndex]}")
+                println("ERROR: Couldn't instantiate custom Antlr context ${CqlRuleTypes.RULE_NAMES[elType.ruleIndex]}")
                 ANTLRPsiNode(node)
             }
         }

@@ -86,11 +86,7 @@ class FunctionDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, Declarin
         )
     }
 
-    override fun getResultType(): DataType? {
-        val returType = typeSpecifier()?.resolveType() ?: functionBody()?.getResultType()
-        println("function type ${identifierOrFunctionIdentifier()?.text} $returType")
-        return returType
-    }
+    override fun getResultType() = typeSpecifier()?.resolveType() ?: functionBody()?.getResultType()
 }
 
 class FunctionBody(node: ASTNode) : BasePsiNode(node), HasResultType {

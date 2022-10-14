@@ -32,13 +32,7 @@ class InvocationExpressionTerm(node: ASTNode) : ExpressionTerm(node), HasQualifi
         return expressionTerm()?.getResultType()
     }
 
-    override fun getResultType(): DataType? {
-        val resultType = qualifiedInvocation()?.getResultType()
-
-        println("InvocationExpressionTerm ${this.text} result type is $resultType")
-
-        return resultType
-    }
+    override fun getResultType() = qualifiedInvocation()?.getResultType()
 }
 
 class AdditionExpressionTerm(node: ASTNode) : ExpressionTerm(node) {

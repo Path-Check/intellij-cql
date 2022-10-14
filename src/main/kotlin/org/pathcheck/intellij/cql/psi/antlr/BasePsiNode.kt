@@ -98,27 +98,18 @@ open class BasePsiNode(node: ASTNode) : ANTLRPsiNode(node) {
     }
 
     fun resolveTypeName(modelName: String?, typeName: String): DataType? {
-        println(getLibrary())
-        println(getLibrary()?.findModels())
-
         if (modelName == null) {
             // finds a model that has the typeName
             getLibrary()?.findModels()?.forEach { model ->
-                println("Testing ${model.modelInfo.name}")
-
-                model.resolveLabel(typeName)?.let { println(it); return it }
-                model.resolveTypeName(typeName)?.let { println(it);return it }
+                model.resolveLabel(typeName)?.let { return it }
+                model.resolveTypeName(typeName)?.let { return it }
             }
-
-            println("Couldn't resolve TypeName ${modelName} ${typeName}")
         } else {
             val model = resolveModel(modelName)
             if (model != null) {
-                model.resolveLabel(typeName)?.let { println(it);return it }
-                model.resolveTypeName(typeName)?.let { println(it);return it }
+                model.resolveLabel(typeName)?.let { return it }
+                model.resolveTypeName(typeName)?.let { return it }
             }
-
-            println("Couldn't resolve TypeName ${modelName} ${typeName} ${model}")
         }
         return null
     }

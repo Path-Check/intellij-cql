@@ -29,9 +29,7 @@ open class QualifiedInvocation(node: ASTNode) : BasePsiNode(node), HasResultType
         // solve qualifiers here.
         val typedParent = parent
         if (typedParent is HasQualifier) {
-            val qualifier = typedParent.getQualifier()
-            println("Finding ${qualifier} ${text}")
-            return findMemberType(qualifier, text)
+            return findMemberType(typedParent.getQualifier(), text)
         }
 
         // It should never happen.
@@ -112,14 +110,9 @@ class QualifiedMemberInvocation(node: ASTNode) : QualifiedInvocation(node), Scop
 
     override fun getResultType(): DataType? {
         // solve qualifiers here.
-        println("QualifiedMemberInvocation for ${referentialIdentifier()?.text}")
-
         val typedParent = parent
         if (typedParent is HasQualifier) {
-            val qualifier = typedParent.getQualifier()
-            val member = referentialIdentifier()?.text
-            println("Finding ${qualifier} ${member} ${findMemberType(qualifier, member)}")
-            return findMemberType(qualifier, member)
+            return findMemberType(typedParent.getQualifier(), referentialIdentifier()?.text)
         }
 
         // It should never happen.
