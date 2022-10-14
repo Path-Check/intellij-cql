@@ -8,8 +8,7 @@ import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.LookupProvider
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
-import org.pathcheck.intellij.cql.psi.Identifier
+import org.pathcheck.intellij.cql.psi.references.Identifier
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 
@@ -23,20 +22,20 @@ class ConceptDefinition(node: ASTNode) : BasePsiNode(node),
         return getRule(Identifier::class.java, 0)
     }
 
-    fun codeIdentifier(): List<PsiContextNodes.CodeIdentifier>? {
-        return getRules(PsiContextNodes.CodeIdentifier::class.java)
+    fun codeIdentifier(): List<CodeIdentifier>? {
+        return getRules(CodeIdentifier::class.java)
     }
 
-    fun codeIdentifier(i: Int): PsiContextNodes.CodeIdentifier? {
-        return getRule(PsiContextNodes.CodeIdentifier::class.java, i)
+    fun codeIdentifier(i: Int): CodeIdentifier? {
+        return getRule(CodeIdentifier::class.java, i)
     }
 
-    fun accessModifier(): PsiContextNodes.AccessModifier? {
-        return getRule(PsiContextNodes.AccessModifier::class.java, 0)
+    fun accessModifier(): AccessModifier? {
+        return getRule(AccessModifier::class.java, 0)
     }
 
-    fun displayClause(): PsiContextNodes.DisplayClause? {
-        return getRule(PsiContextNodes.DisplayClause::class.java, 0)
+    fun displayClause(): DisplayClause? {
+        return getRule(DisplayClause::class.java, 0)
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {

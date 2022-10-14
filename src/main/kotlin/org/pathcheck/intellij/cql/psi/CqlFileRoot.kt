@@ -3,7 +3,7 @@ package org.pathcheck.intellij.cql.psi
 import com.intellij.extapi.psi.PsiFileBase
 import com.intellij.openapi.fileTypes.FileType
 import com.intellij.psi.FileViewProvider
-import org.antlr.intellij.adaptor.psi.ScopeNode
+import org.cqframework.cql.cql2elm.model.OperatorMap
 import org.pathcheck.intellij.cql.CqlFileType
 import org.pathcheck.intellij.cql.CqlIcons
 import org.pathcheck.intellij.cql.CqlLanguage
@@ -11,6 +11,8 @@ import javax.swing.Icon
 
 
 class CqlFileRoot(viewProvider: FileViewProvider) : PsiFileBase(viewProvider, CqlLanguage) {
+
+    var operatorMap: OperatorMap? = null // list available conversions from last compilation
 
     fun library(): Library? {
         return findChildByClass(Library::class.java)

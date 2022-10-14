@@ -1,4 +1,4 @@
-package org.pathcheck.intellij.cql.psi.definitions
+package org.pathcheck.intellij.cql.psi.statements
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
@@ -8,7 +8,8 @@ import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.*
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
+import org.pathcheck.intellij.cql.psi.references.Identifier
+import org.pathcheck.intellij.cql.psi.references.ModelIdentifier
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 
@@ -20,8 +21,8 @@ class ContextDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupPro
         return getRule(Identifier::class.java, 0)
     }
 
-    fun modelIdentifier(): PsiContextNodes.ModelIdentifier? {
-        return getRule(PsiContextNodes.ModelIdentifier::class.java, 0)
+    fun modelIdentifier(): ModelIdentifier? {
+        return getRule(ModelIdentifier::class.java, 0)
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {

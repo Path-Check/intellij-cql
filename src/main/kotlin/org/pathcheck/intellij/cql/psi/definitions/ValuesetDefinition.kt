@@ -8,8 +8,7 @@ import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.LookupProvider
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
-import org.pathcheck.intellij.cql.psi.Identifier
+import org.pathcheck.intellij.cql.psi.references.Identifier
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 
@@ -23,20 +22,20 @@ class ValuesetDefinition(node: ASTNode) : BasePsiNode(node),
         return getRule(Identifier::class.java, 0)
     }
 
-    fun valuesetId(): PsiContextNodes.ValuesetId? {
-        return getRule(PsiContextNodes.ValuesetId::class.java, 0)
+    fun valuesetId(): ValuesetId? {
+        return getRule(ValuesetId::class.java, 0)
     }
 
-    fun accessModifier(): PsiContextNodes.AccessModifier? {
-        return getRule(PsiContextNodes.AccessModifier::class.java, 0)
+    fun accessModifier(): AccessModifier? {
+        return getRule(AccessModifier::class.java, 0)
     }
 
-    fun versionSpecifier(): PsiContextNodes.VersionSpecifier? {
-        return getRule(PsiContextNodes.VersionSpecifier::class.java, 0)
+    fun versionSpecifier(): VersionSpecifier? {
+        return getRule(VersionSpecifier::class.java, 0)
     }
 
-    fun codesystems(): PsiContextNodes.Codesystems? {
-        return getRule(PsiContextNodes.Codesystems::class.java, 0)
+    fun codesystems(): Codesystems? {
+        return getRule(Codesystems::class.java, 0)
     }
 
 

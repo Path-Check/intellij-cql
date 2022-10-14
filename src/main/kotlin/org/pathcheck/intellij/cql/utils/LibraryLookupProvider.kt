@@ -7,10 +7,10 @@ import org.hl7.elm.r1.ExpressionDef
 import org.hl7.elm.r1.FunctionDef
 import org.hl7.elm.r1.Library
 
-fun Library.exportingLookups(): List<LookupElementBuilder>? {
+fun Library.exportingLookups(): List<LookupElementBuilder> {
     return statements?.def?.mapNotNull {
         if (it is FunctionDef) it.lookup() else it.lookup()
-    }?.flatten()
+    }?.flatten() ?: emptyList()
 }
 
 fun FunctionDef.getParametersStr(): String {

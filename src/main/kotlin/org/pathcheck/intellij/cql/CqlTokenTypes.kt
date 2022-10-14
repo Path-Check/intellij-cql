@@ -5,6 +5,8 @@ import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory
 import org.antlr.intellij.adaptor.lexer.TokenIElementType
 import org.antlr.v4.runtime.VocabularyImpl
 import org.cqframework.cql.gen.cqlLexer
+import org.cqframework.cql.gen.cqlParser
+import org.pathcheck.intellij.cql.parser.CqlRuleTypes
 
 object CqlTokenTypes {
     val TOKEN_ELEMENT_TYPES: List<TokenIElementType> by lazy {

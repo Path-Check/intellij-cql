@@ -4,12 +4,14 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
+import com.intellij.util.containers.addAllIfNotNull
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.cqframework.cql.cql2elm.model.Model
+import org.pathcheck.intellij.cql.elm.GlobalCache
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
 import org.pathcheck.intellij.cql.psi.definitions.Definition
 import org.pathcheck.intellij.cql.psi.definitions.LibraryDefinition
+import org.pathcheck.intellij.cql.psi.statements.Statement
 
 class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifiers, LookupProvider {
     fun libraryDefinition(): LibraryDefinition? {
@@ -24,12 +26,12 @@ class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifier
         return getRule(Definition::class.java, i)
     }
 
-    fun statement(): List<PsiContextNodes.Statement>? {
-        return getRules(PsiContextNodes.Statement::class.java)
+    fun statement(): List<Statement>? {
+        return getRules(Statement::class.java)
     }
 
-    fun statement(i: Int): PsiContextNodes.Statement? {
-        return getRule(PsiContextNodes.Statement::class.java, i)
+    fun statement(i: Int): Statement? {
+        return getRule(Statement::class.java, i)
     }
 
     override fun getContext(): ScopeNode? {
@@ -109,8 +111,23 @@ class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifier
     }
 
     fun findModels(): List<Model> {
-        return definition()?.mapNotNull {
-            it.usingDefinition()?.getModel()
-        } ?: emptyList()
+        return try {
+            val system = GlobalCache.modelManager.resolveModel("System")
+
+            val explicitInclusions = definition()?.mapNotNull {
+                it.usingDefinition()?.getModel()
+            } ?: emptyList()
+
+            explicitInclusions.plus(system)
+        } catch (e: Exception) {
+            println("ERROR: System model is not ready yet")
+            emptyList()
+        }
+    }
+
+    fun findModel(modelName: String): Model? {
+        return findModels().firstOrNull {
+            it.modelInfo.name == modelName
+        }
     }
 }

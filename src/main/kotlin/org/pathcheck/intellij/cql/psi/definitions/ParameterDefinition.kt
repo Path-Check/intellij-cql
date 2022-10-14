@@ -8,8 +8,9 @@ import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.LookupProvider
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
-import org.pathcheck.intellij.cql.psi.Identifier
+import org.pathcheck.intellij.cql.psi.expressions.Expression
+import org.pathcheck.intellij.cql.psi.expressions.TypeSpecifier
+import org.pathcheck.intellij.cql.psi.references.Identifier
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 
@@ -22,16 +23,16 @@ class ParameterDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupP
         return getRule(Identifier::class.java, 0)
     }
 
-    fun accessModifier(): PsiContextNodes.AccessModifier? {
-        return getRule(PsiContextNodes.AccessModifier::class.java, 0)
+    fun accessModifier(): AccessModifier? {
+        return getRule(AccessModifier::class.java, 0)
     }
 
-    fun typeSpecifier(): PsiContextNodes.TypeSpecifier? {
-        return getRule(PsiContextNodes.TypeSpecifier::class.java, 0)
+    fun typeSpecifier(): TypeSpecifier? {
+        return getRule(TypeSpecifier::class.java, 0)
     }
 
-    fun expression(): PsiContextNodes.Expression? {
-        return getRule(PsiContextNodes.Expression::class.java, 0)
+    fun expression(): Expression? {
+        return getRule(Expression::class.java, 0)
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {

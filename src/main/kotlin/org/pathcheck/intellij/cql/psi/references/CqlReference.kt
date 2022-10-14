@@ -7,6 +7,7 @@ import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
 import org.pathcheck.intellij.cql.psi.scopes.QualifiedMemberInvocation
+import org.pathcheck.intellij.cql.utils.printParentStack
 
 /**
  * Represents any resolvable identifier in the editor
@@ -19,6 +20,8 @@ class CqlReference(element: IdentifierPSINode) :
         if (scope is QualifiedMemberInvocation) {
             return scope.expandLookup().toTypedArray()
         }
+
+        println("Variants not found for scope $scope")
 
         return emptyArray()
     }

@@ -10,6 +10,7 @@ import org.cqframework.cql.cql2elm.CqlCompiler
 import org.cqframework.cql.cql2elm.CqlCompilerException
 import org.cqframework.cql.elm.tracking.TrackBack
 import org.hl7.elm.r1.Library
+import org.pathcheck.intellij.cql.psi.CqlFileRoot
 import java.io.IOException
 
 class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerException>?>() {
@@ -43,15 +44,19 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
     }
 
     private fun compile(file: PsiFile): List<CqlCompilerException>? {
+        if (file !is CqlFileRoot) return emptyList()
+
         try {
             // ModelManager and Library Manager must be created in this context to make sure ServiceLoaders are ready
             val libraryManager = AdaptedLibraryManager().apply {
-                librarySourceLoader.registerProvider(PsiDirectoryLibrarySourceProvider(file.containingDirectory))
+                librarySourceLoader.registerProvider(PsiDirectoryLibrarySourceProvider(file.originalFile.containingDirectory))
             }
 
             val compiler = CqlCompiler(GlobalCache.modelManager, libraryManager).apply {
                 run(file.text)
             }
+
+            file.operatorMap = compiler.compiledLibrary.operatorMap
 
             return (compiler.errors
                 + compiler.warnings

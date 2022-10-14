@@ -9,8 +9,12 @@ import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ANTLRPsiLeafNode
 import org.antlr.intellij.adaptor.psi.Trees
 import org.pathcheck.intellij.cql.CqlLanguage
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
+import org.pathcheck.intellij.cql.psi.definitions.QualifiedIdentifier
+import org.pathcheck.intellij.cql.psi.expressions.Invocation
 import org.pathcheck.intellij.cql.psi.references.CqlReference
+import org.pathcheck.intellij.cql.psi.scopes.QualifiedIdentifierExpression
+import org.pathcheck.intellij.cql.psi.scopes.QualifiedInvocation
+import org.pathcheck.intellij.cql.psi.references.ReferentialIdentifier
 
 /** From doc: "Every element which can be renamed or referenced
  * needs to implement com.intellij.psi.PsiNamedElement interface."
@@ -70,10 +74,11 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
      */
     override fun getReference(): PsiReference? {
         findParentInFile {
-                     it is PsiContextNodes.Invocation
-                  || it is PsiContextNodes.QualifiedInvocation
-                  || it is PsiContextNodes.QualifiedIdentifierExpression // QuerySource from variable
-                  || it is PsiContextNodes.QualifiedIdentifier // LibraryDef, IncludeDef, UsingDef
+                     it is Invocation
+                  || it is QualifiedInvocation
+                  || it is QualifiedIdentifierExpression // QuerySource from variable
+                  || it is QualifiedIdentifier // LibraryDef, IncludeDef, UsingDef
+                  || it is ReferentialIdentifier
         }?.let {
             return CqlReference(this)
         }

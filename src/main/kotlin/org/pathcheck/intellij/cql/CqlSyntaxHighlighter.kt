@@ -233,16 +233,5 @@ class CqlSyntaxHighlighter : SyntaxHighlighterBase() {
         val PARENTHESES = TextAttributesKey.createTextAttributesKey("CQL_PARENTHESES", DefaultLanguageHighlighterColors.PARENTHESES)
         val FUNCTION_CALL = TextAttributesKey.createTextAttributesKey("CQL_FUNCTION_CALL", DefaultLanguageHighlighterColors.FUNCTION_CALL)
         val FUNCTION_DECLARATION = TextAttributesKey.createTextAttributesKey("CQL_FUNCTION_DECLARATION", DefaultLanguageHighlighterColors.FUNCTION_DECLARATION)
-
-        init {
-            /**
-             * Includes subclasses of rules
-             */
-            PSIElementTypeFactory.defineLanguageIElementTypes(
-                CqlLanguage,
-                cqlParser.tokenNames,
-                CqlRuleTypes.RULE_NAMES
-            )
-        }
     }
 }

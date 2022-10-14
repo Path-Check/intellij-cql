@@ -9,6 +9,7 @@ import com.intellij.util.ProcessingContext
 import org.hl7.cql.model.DataType
 import org.pathcheck.intellij.cql.psi.CqlFileRoot
 import org.pathcheck.intellij.cql.utils.getPrivateProperty
+import org.pathcheck.intellij.cql.utils.takeIndex
 
 class ModelCompletionProvider: CompletionProvider<CompletionParameters>() {
     override fun addCompletions(params: CompletionParameters, context: ProcessingContext, result: CompletionResultSet) {
@@ -21,17 +22,9 @@ class ModelCompletionProvider: CompletionProvider<CompletionParameters>() {
         if (root is CqlFileRoot) {
             val models = root.library()?.findModels() ?: emptyList()
             val dataTypes = mutableMapOf<String, DataType>()
-            if (models.size > 1) {
-                // Uses code completion without prefix
-                models.forEach {
-                    dataTypes.putAll(it.getPrivateProperty("index") as Map<String, DataType>)
-                }
-            } else {
-                // Uses code completion with prefix
-                models.forEach {
-                    dataTypes.putAll(it.getPrivateProperty("nameIndex") as Map<String, DataType>)
-                    dataTypes.putAll(it.getPrivateProperty("classIndex") as Map<String, DataType>)
-                }
+
+            models.forEach {
+                dataTypes.putAll(it.takeIndex())
             }
 
             dataTypes

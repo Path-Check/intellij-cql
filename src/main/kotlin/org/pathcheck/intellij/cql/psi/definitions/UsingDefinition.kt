@@ -11,43 +11,45 @@ import org.hl7.cql.model.ClassType
 import org.hl7.cql.model.DataType
 import org.hl7.cql.model.ModelIdentifier
 import org.pathcheck.intellij.cql.elm.GlobalCache
+import org.pathcheck.intellij.cql.psi.HasResultType
 import org.pathcheck.intellij.cql.psi.LookupProvider
+import org.pathcheck.intellij.cql.psi.ModelType
 import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
-import org.pathcheck.intellij.cql.utils.getPrivateProperty
+import org.pathcheck.intellij.cql.utils.takeIndex
 
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
  */
-class UsingDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvider, ReferenceLookupProvider {
+class UsingDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvider, ReferenceLookupProvider, HasResultType {
 
-    fun qualifiedIdentifier(): PsiContextNodes.QualifiedIdentifier? {
-        return getRule(PsiContextNodes.QualifiedIdentifier::class.java, 0)
+    fun qualifiedIdentifier(): QualifiedIdentifier? {
+        return getRule(QualifiedIdentifier::class.java, 0)
     }
 
-    fun versionSpecifier(): PsiContextNodes.VersionSpecifier? {
-        return getRule(PsiContextNodes.VersionSpecifier::class.java, 0)
+    fun versionSpecifier(): VersionSpecifier? {
+        return getRule(VersionSpecifier::class.java, 0)
     }
 
-    fun localIdentifier(): PsiContextNodes.LocalIdentifier? {
-        return getRule(PsiContextNodes.LocalIdentifier::class.java, 0)
+    fun localIdentifier(): LocalIdentifier? {
+        return getRule(LocalIdentifier::class.java, 0)
     }
+
+    override fun getResultType() = getModel()?.let { ModelType(it) }
 
     fun getModel(): Model? {
         return try {
             GlobalCache.modelManager.resolveModel(getModelIdentifier())
         } catch (e: Exception) {
+            e.printStackTrace()
             null
         }
     }
 
     fun getModelTypes(): Map<String, DataType> {
-        val model = getModel()?: return emptyMap()
-
-        return model.getPrivateProperty("index") as Map<String, DataType>
+        return getModel()?.takeIndex() ?: return emptyMap()
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {

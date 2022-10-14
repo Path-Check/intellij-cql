@@ -8,8 +8,7 @@ import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.LookupProvider
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
-import org.pathcheck.intellij.cql.psi.Identifier
+import org.pathcheck.intellij.cql.psi.references.Identifier
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 
@@ -23,16 +22,16 @@ class CodesystemDefinition(node: ASTNode) : BasePsiNode(node),
         return getRule(Identifier::class.java, 0)
     }
 
-    fun codesystemId(): PsiContextNodes.CodesystemId? {
-        return getRule(PsiContextNodes.CodesystemId::class.java, 0)
+    fun codesystemId(): CodesystemId? {
+        return getRule(CodesystemId::class.java, 0)
     }
 
-    fun accessModifier(): PsiContextNodes.AccessModifier? {
-        return getRule(PsiContextNodes.AccessModifier::class.java, 0)
+    fun accessModifier(): AccessModifier? {
+        return getRule(AccessModifier::class.java, 0)
     }
 
-    fun versionSpecifier(): PsiContextNodes.VersionSpecifier? {
-        return getRule(PsiContextNodes.VersionSpecifier::class.java, 0)
+    fun versionSpecifier(): VersionSpecifier? {
+        return getRule(VersionSpecifier::class.java, 0)
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {

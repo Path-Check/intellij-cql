@@ -1,4 +1,4 @@
-package org.pathcheck.intellij.cql.psi.definitions
+package org.pathcheck.intellij.cql.psi.statements
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
@@ -6,28 +6,31 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
+import org.hl7.cql.model.DataType
+import org.pathcheck.intellij.cql.psi.HasResultType
 import org.pathcheck.intellij.cql.psi.LookupProvider
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
-import org.pathcheck.intellij.cql.psi.Identifier
+import org.pathcheck.intellij.cql.psi.definitions.AccessModifier
+import org.pathcheck.intellij.cql.psi.expressions.Expression
+import org.pathcheck.intellij.cql.psi.references.Identifier
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
  */
-class ExpressionDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvider {
+class ExpressionDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvider, HasResultType {
 
     fun identifier(): Identifier? {
         return getRule(Identifier::class.java, 0)
     }
 
-    fun expression(): PsiContextNodes.Expression? {
-        return getRule(PsiContextNodes.Expression::class.java, 0)
+    fun expression(): Expression? {
+        return getRule(Expression::class.java, 0)
     }
 
-    fun accessModifier(): PsiContextNodes.AccessModifier? {
-        return getRule(PsiContextNodes.AccessModifier::class.java, 0)
+    fun accessModifier(): AccessModifier? {
+        return getRule(AccessModifier::class.java, 0)
     }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {
@@ -40,8 +43,10 @@ class ExpressionDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, Lookup
                 identifier()?.any()?.cleanText(),
                 AllIcons.Nodes.Method,
                 null,
-                null
+                getResultType()?.toLabel()
             )
         )
     }
+
+    override fun getResultType() = expression()?.getResultType()
 }

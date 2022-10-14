@@ -7,16 +7,14 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.util.PsiTreeUtil
 import org.antlr.intellij.adaptor.psi.ScopeNode
+import org.hl7.cql.model.DataType
 import org.hl7.cql.model.NamespaceManager
 import org.hl7.elm.r1.Library
 import org.hl7.elm.r1.VersionedIdentifier
 import org.pathcheck.intellij.cql.elm.GlobalCache
 import org.pathcheck.intellij.cql.elm.PsiDirectoryLibrarySourceProvider
-import org.pathcheck.intellij.cql.psi.LookupProvider
-import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
+import org.pathcheck.intellij.cql.psi.*
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.antlr.PsiContextNodes
-import org.pathcheck.intellij.cql.psi.CqlFileRoot
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
 import org.pathcheck.intellij.cql.utils.exportingLookups
@@ -24,19 +22,22 @@ import org.pathcheck.intellij.cql.utils.exportingLookups
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
  */
-class IncludeDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvider, ReferenceLookupProvider {
+class IncludeDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvider, ReferenceLookupProvider, HasResultType {
 
-    fun qualifiedIdentifier(): PsiContextNodes.QualifiedIdentifier? {
-        return getRule(PsiContextNodes.QualifiedIdentifier::class.java, 0)
+    fun qualifiedIdentifier(): QualifiedIdentifier? {
+        return getRule(QualifiedIdentifier::class.java, 0)
     }
 
-    fun versionSpecifier(): PsiContextNodes.VersionSpecifier? {
-        return getRule(PsiContextNodes.VersionSpecifier::class.java, 0)
+    fun versionSpecifier(): VersionSpecifier? {
+        return getRule(VersionSpecifier::class.java, 0)
     }
 
-    fun localIdentifier(): PsiContextNodes.LocalIdentifier? {
-        return getRule(PsiContextNodes.LocalIdentifier::class.java, 0)
+    fun localIdentifier(): LocalIdentifier? {
+        return getRule(LocalIdentifier::class.java, 0)
     }
+
+    override fun getResultType() =
+        getLinkedLocalLibrary()?.let { LibraryType(it) } ?: getLinkedExternalLibrary()?.let { CompiledLibraryType(it) }
 
     override fun resolve(element: PsiNamedElement): PsiElement? {
         // Clicks on the includeDefinition always point to the libraryDefinition in the linked filed.
