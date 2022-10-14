@@ -66,16 +66,10 @@ class QualifiedFunctionInvocation(node: ASTNode) : QualifiedInvocation(node), Sc
 
         val typedParent = parent
         if (typedParent is HasQualifier) {
-            println("Getting ${text} ${typedParent.getQualifier()}")
-
-        /*
-            val qualifierDefinitionScope = (parent as InvocationExpressionTerm).getQualifierDefScope()
-
-            if (qualifierDefinitionScope is IncludeDefinition) {
-                return qualifierDefinitionScope.resolveInLinkedLibrary(element)
+            val qualifierType = typedParent.getQualifier()
+            if (qualifierType is LibraryType) {
+                return qualifierType.library.resolve(element)
             }
-
-            return qualifierDefinitionScope?.resolve(element)*/
         }
 
         return null
@@ -88,6 +82,23 @@ class QualifiedFunctionInvocation(node: ASTNode) : QualifiedInvocation(node), Sc
             if (qualifier is ClassType) {
                 return qualifier.expandLookup()
             }
+            if (qualifier is ListType) {
+                // List demotion
+                if (qualifier.elementType is ClassType) {
+                    return (qualifier.elementType as ClassType).expandLookup()
+                }
+            }
+            if (qualifier is ModelType) {
+                return qualifier.model.expandLookup()
+            }
+            if (qualifier is LibraryType) {
+                return qualifier.library.exportingLookups()
+            }
+            if (qualifier is CompiledLibraryType) {
+                return qualifier.library.exportingLookups()
+            }
+
+            println("ERROR: Couldn't expand qualifier $qualifier with class ${qualifier?.javaClass}")
         }
 
         return emptyList()
@@ -124,15 +135,12 @@ class QualifiedMemberInvocation(node: ASTNode) : QualifiedInvocation(node), Scop
             return context?.resolve(element)
         }
 
-        if (parent is InvocationExpressionTerm) {
-            /*
-            val qualifierDefinitionScope = (parent as InvocationExpressionTerm).getQualifierDefScope()
-
-            if (qualifierDefinitionScope is IncludeDefinition) {
-                return qualifierDefinitionScope.resolveInLinkedLibrary(element)
+        val typedParent = parent
+        if (typedParent is HasQualifier) {
+            val qualifierType = typedParent.getQualifier()
+            if (qualifierType is LibraryType) {
+                return qualifierType.library.resolve(element)
             }
-
-            return qualifierDefinitionScope?.resolve(element)*/
         }
 
         return null;
