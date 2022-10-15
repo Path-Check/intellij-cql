@@ -8,7 +8,6 @@ import com.intellij.icons.AllIcons
 import com.intellij.util.ProcessingContext
 import org.hl7.cql.model.DataType
 import org.pathcheck.intellij.cql.psi.CqlFileRoot
-import org.pathcheck.intellij.cql.utils.getPrivateProperty
 import org.pathcheck.intellij.cql.utils.takeIndex
 
 class ModelCompletionProvider: CompletionProvider<CompletionParameters>() {
