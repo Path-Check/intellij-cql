@@ -6,12 +6,9 @@ import com.intellij.openapi.editor.colors.TextAttributesKey
 import com.intellij.openapi.fileTypes.SyntaxHighlighterBase
 import com.intellij.psi.tree.IElementType
 import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor
-import org.antlr.intellij.adaptor.lexer.PSIElementTypeFactory
 import org.antlr.intellij.adaptor.lexer.TokenIElementType
 import org.cqframework.cql.gen.cqlLexer
-import org.cqframework.cql.gen.cqlParser
 import org.pathcheck.intellij.cql.parser.AdaptedCqlLexer
-import org.pathcheck.intellij.cql.parser.CqlRuleTypes
 
 /** A highlighter is really just a mapping from token type to
  * some text attributes using [.getTokenHighlights].

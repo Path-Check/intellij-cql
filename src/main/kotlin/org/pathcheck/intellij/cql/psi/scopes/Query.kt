@@ -5,7 +5,6 @@ import com.intellij.icons.AllIcons
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
-import com.intellij.psi.util.isAncestor
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.hl7.cql.model.DataType
 import org.pathcheck.intellij.cql.psi.DeclaringIdentifiers

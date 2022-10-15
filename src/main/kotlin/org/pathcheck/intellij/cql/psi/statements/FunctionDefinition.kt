@@ -7,7 +7,6 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import org.hl7.cql.model.DataType
 import org.pathcheck.intellij.cql.psi.DeclaringIdentifiers
 import org.pathcheck.intellij.cql.psi.HasResultType
 import org.pathcheck.intellij.cql.psi.LookupProvider

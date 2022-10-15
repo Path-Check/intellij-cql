@@ -8,9 +8,9 @@ import org.antlr.intellij.adaptor.lexer.ANTLRLexerAdaptor
 import org.pathcheck.intellij.cql.parser.AdaptedCqlLexer
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
 import org.pathcheck.intellij.cql.psi.references.IdentifierOrFunctionIdentifier
-import org.pathcheck.intellij.cql.psi.scopes.QualifiedFunction
 import org.pathcheck.intellij.cql.psi.references.ReferentialIdentifier
 import org.pathcheck.intellij.cql.psi.scopes.Function
+import org.pathcheck.intellij.cql.psi.scopes.QualifiedFunction
 
 class CqlFindUsagesProvider : FindUsagesProvider {
     /** Is "find usages" meaningful for a kind of definition subtree?  */

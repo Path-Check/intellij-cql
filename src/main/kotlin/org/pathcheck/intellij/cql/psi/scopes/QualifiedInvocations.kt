@@ -10,12 +10,11 @@ import org.hl7.cql.model.DataType
 import org.hl7.cql.model.ListType
 import org.pathcheck.intellij.cql.psi.*
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
-import org.pathcheck.intellij.cql.psi.definitions.IncludeDefinition
-import org.pathcheck.intellij.cql.psi.expressions.InvocationExpressionTerm
-import org.pathcheck.intellij.cql.psi.references.*
+import org.pathcheck.intellij.cql.psi.references.IdentifierOrFunctionIdentifier
+import org.pathcheck.intellij.cql.psi.references.ParamList
+import org.pathcheck.intellij.cql.psi.references.ReferentialIdentifier
 import org.pathcheck.intellij.cql.utils.expandLookup
 import org.pathcheck.intellij.cql.utils.exportingLookups
-import org.pathcheck.intellij.cql.utils.printParentStack
 
 /** A subtree associated with a function definition.
  * Its scope is the set of arguments.

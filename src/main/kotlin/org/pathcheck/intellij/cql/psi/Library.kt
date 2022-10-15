@@ -4,7 +4,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
-import com.intellij.util.containers.addAllIfNotNull
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.cqframework.cql.cql2elm.model.Model
 import org.pathcheck.intellij.cql.elm.GlobalCache

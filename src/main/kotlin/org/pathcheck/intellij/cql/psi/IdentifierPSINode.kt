@@ -12,9 +12,9 @@ import org.pathcheck.intellij.cql.CqlLanguage
 import org.pathcheck.intellij.cql.psi.definitions.QualifiedIdentifier
 import org.pathcheck.intellij.cql.psi.expressions.Invocation
 import org.pathcheck.intellij.cql.psi.references.CqlReference
+import org.pathcheck.intellij.cql.psi.references.ReferentialIdentifier
 import org.pathcheck.intellij.cql.psi.scopes.QualifiedIdentifierExpression
 import org.pathcheck.intellij.cql.psi.scopes.QualifiedInvocation
-import org.pathcheck.intellij.cql.psi.references.ReferentialIdentifier
 
 /** From doc: "Every element which can be renamed or referenced
  * needs to implement com.intellij.psi.PsiNamedElement interface."

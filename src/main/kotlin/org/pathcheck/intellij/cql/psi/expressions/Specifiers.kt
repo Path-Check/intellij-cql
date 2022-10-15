@@ -5,8 +5,8 @@ import org.hl7.cql.model.*
 import org.pathcheck.intellij.cql.psi.IsResultType
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
 import org.pathcheck.intellij.cql.psi.definitions.Qualifier
-import org.pathcheck.intellij.cql.psi.references.ReferentialOrTypeNameIdentifier
 import org.pathcheck.intellij.cql.psi.references.ReferentialIdentifier
+import org.pathcheck.intellij.cql.psi.references.ReferentialOrTypeNameIdentifier
 
 class TypeSpecifier(node: ASTNode) : BasePsiNode(node), IsResultType {
     fun namedTypeSpecifier(): NamedTypeSpecifier? {

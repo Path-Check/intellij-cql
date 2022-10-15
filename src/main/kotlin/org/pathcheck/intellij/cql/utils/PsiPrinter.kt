@@ -2,7 +2,6 @@ package org.pathcheck.intellij.cql.utils
 
 import com.intellij.psi.PsiElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import javax.inject.Scope
 
 fun PsiElement.printTree() {
     printTree("")

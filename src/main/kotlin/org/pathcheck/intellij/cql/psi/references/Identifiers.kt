@@ -8,8 +8,6 @@ import org.pathcheck.intellij.cql.psi.HasResultType
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
 import org.pathcheck.intellij.cql.psi.expressions.Expression
-import org.pathcheck.intellij.cql.psi.references.ReferentialIdentifier
-import org.pathcheck.intellij.cql.utils.printParentStack
 
 class Identifier(node: ASTNode) : BasePsiNode(node) {
     fun IDENTIFIER(): IdentifierPSINode? {

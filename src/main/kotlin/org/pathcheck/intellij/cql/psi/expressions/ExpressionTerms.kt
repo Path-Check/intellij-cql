@@ -1,15 +1,11 @@
 package org.pathcheck.intellij.cql.psi.expressions
 
 import com.intellij.lang.ASTNode
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiNamedElement
-import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.hl7.cql.model.DataType
 import org.pathcheck.intellij.cql.psi.HasQualifier
 import org.pathcheck.intellij.cql.psi.HasResultType
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
 import org.pathcheck.intellij.cql.psi.scopes.QualifiedInvocation
-import org.pathcheck.intellij.cql.psi.scopes.QualifierExpression
 
 open class ExpressionTerm(node: ASTNode) : BasePsiNode(node), HasResultType {
     // This should never happen
