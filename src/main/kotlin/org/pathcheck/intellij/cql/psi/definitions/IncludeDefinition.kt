@@ -48,10 +48,7 @@ class IncludeDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupPro
     }
 
     private fun getLinkedExternalLibrary(): Library? {
-        val libraryVersion = getVersionIdentifier()
-        val libraryPath = NamespaceManager.getPath(libraryVersion.system, libraryVersion.id)
-
-        return GlobalCache.libraryManager.compiledLibraries[libraryPath]?.library
+        return GlobalCache.resolveLibrary(getVersionIdentifier())
     }
 
     private fun getLinkedLocalLibrary(): org.pathcheck.intellij.cql.psi.Library? {

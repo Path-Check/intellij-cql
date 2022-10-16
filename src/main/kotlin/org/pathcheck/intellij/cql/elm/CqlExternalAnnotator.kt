@@ -26,21 +26,7 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
 
         // Must be on a RunAction to open dependency files.
         return ApplicationManager.getApplication().runReadAction<List<CqlCompilerException>?> {
-            /*
-                Some libraries use ServiceLoader to detect and load implementations. For this to work in a plugin,
-                the context class loader must be set to the plugin's classloader and restored afterwards with the
-                original one around initialization code:
-             */
-            val currentThread = Thread.currentThread()
-            val originalClassLoader = currentThread.contextClassLoader
-            val pluginClassLoader = this.javaClass.classLoader
-            try {
-                currentThread.contextClassLoader = pluginClassLoader
-
-                compile(file)
-            } finally {
-                currentThread.contextClassLoader = originalClassLoader
-            }
+            compile(file)
         }
     }
 
@@ -48,14 +34,7 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
         if (file !is CqlFileRoot) return emptyList()
 
         try {
-            // ModelManager and Library Manager must be created in this context to make sure ServiceLoaders are ready
-            val libraryManager = AdaptedLibraryManager().apply {
-                librarySourceLoader.registerProvider(PsiDirectoryLibrarySourceProvider(file.originalFile.containingDirectory))
-            }
-
-            val compiler = CqlCompiler(GlobalCache.modelManager, libraryManager).apply {
-                run(file.text)
-            }
+            val compiler = GlobalCache.compileLibrary(file)
 
             file.operatorMap = compiler.compiledLibrary.operatorMap
 

@@ -41,7 +41,7 @@ class UsingDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvi
 
     fun getModel(): Model? {
         return try {
-            GlobalCache.modelManager.resolveModel(getModelIdentifier())
+            GlobalCache.resolveModel(getModelIdentifier())
         } catch (e: Exception) {
             e.printStackTrace()
             null

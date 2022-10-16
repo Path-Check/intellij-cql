@@ -110,13 +110,13 @@ class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifier
 
     fun findModels(): List<Model> {
         return try {
-            val system = GlobalCache.modelManager.resolveModel("System")
+            val system = listOfNotNull(GlobalCache.resolveModel("System"))
 
             val explicitInclusions = definition()?.mapNotNull {
                 it.usingDefinition()?.getModel()
             } ?: emptyList()
 
-            explicitInclusions.plus(system)
+            explicitInclusions + system
         } catch (e: Exception) {
             println("ERROR: System model is not ready yet")
             emptyList()
