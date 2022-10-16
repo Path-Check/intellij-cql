@@ -18,7 +18,7 @@ import org.pathcheck.intellij.cql.utils.cleanText
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
  */
-class ContextDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupProvider, ReferenceLookupProvider {
+class ContextDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, ReferenceLookupProvider {
     fun identifier(): Identifier? {
         return getRule(Identifier::class.java, 0)
     }
@@ -35,17 +35,6 @@ class ContextDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupPro
         }
 
         return context?.resolve(element)
-    }
-
-    override fun lookup(): List<LookupElementBuilder> {
-        return listOfNotNull(
-            LookupHelper.build(
-                identifier()?.cleanText(),
-                AllIcons.Nodes.Package,
-                null,
-                null
-            )
-        )
     }
 
     override fun expandLookup(): List<LookupElementBuilder> {

@@ -93,8 +93,7 @@ class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifier
             statement()?.map {
                 listOfNotNull(
                     it.functionDefinition()?.lookup(),
-                    it.expressionDefinition()?.lookup(),
-                    it.contextDefinition()?.lookup()
+                    it.expressionDefinition()?.lookup()
                 ).flatten()
             }?.flatten()
         ).flatten()
