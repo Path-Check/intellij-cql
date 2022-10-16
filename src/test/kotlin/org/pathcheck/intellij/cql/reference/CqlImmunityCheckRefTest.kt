@@ -1,17 +1,13 @@
 package org.pathcheck.intellij.cql.reference
 
-import com.intellij.psi.PsiElement
-import com.intellij.psi.PsiReference
-import com.intellij.testFramework.fixtures.BasePlatformTestCase
 import org.pathcheck.intellij.cql.psi.definitions.LibraryDefinition
 import org.pathcheck.intellij.cql.psi.definitions.QualifiedIdentifier
 import org.pathcheck.intellij.cql.psi.references.IdentifierOrFunctionIdentifier
 import org.pathcheck.intellij.cql.psi.scopes.Alias
 import org.pathcheck.intellij.cql.psi.statements.ExpressionDefinition
-import org.pathcheck.intellij.cql.utils.CaretUtils
 
 
-class CqlImmunityCheckRefTest : BasePlatformTestCase() {
+class CqlImmunityCheckRefTest: BaseReferenceTestCase() {
     fun testReferenceToAliasIss() {
         assertReferenceIs( 17, 12, Alias::class.java)
     }
@@ -36,39 +32,11 @@ class CqlImmunityCheckRefTest : BasePlatformTestCase() {
         assertReferenceIs(17, 63, IdentifierOrFunctionIdentifier::class.java)
     }
 
-    fun <T:PsiElement> assertReferenceIs(line: Int, column: Int, psiNode: Class<T>) {
-        myFixture.configureByFiles("ImmunityCheck-1.0.0.cql", "Commons-1.0.0.cql", "Commons-1.0.2.cql")
-        moveCaret(line, column)
-        assertEquals(psiNode, resolveRefAtCaret()?.parent?.javaClass)
+    override fun loadFiles(): List<String> {
+        return listOf("ImmunityCheck-1.0.0.cql", "Commons-1.0.0.cql", "Commons-1.0.2.cql")
     }
 
-    private fun assertResolvesToNothing() {
-        val psiElement = resolveRefAtCaret()
-        if (psiElement != null) {
-            fail("Expected element at offset ${myFixture.caretOffset} to resolve to nothing, but resolved to $psiElement")
-        }
-    }
-
-    override fun getTestDataPath(): String {
+    override fun testDirectory(): String {
         return "src/test/testData/ImmunityCheck"
-    }
-
-    private fun moveCaret(line: Int, column: Int) {
-        myFixture.editor.caretModel.moveToOffset(CaretUtils.calculateOffset(myFixture.file.text, line, column))
-    }
-
-    private fun resolveRefAtCaret(): PsiElement? {
-        val elementAtCaret = myFixture.file.findElementAt(myFixture.caretOffset)
-        if (elementAtCaret != null) {
-            val ref: PsiReference? = elementAtCaret.reference
-            if (ref != null) {
-                return ref.resolve()
-            } else {
-                fail("No reference at caret")
-            }
-        } else {
-            fail("No element at caret")
-        }
-        return null
     }
 }

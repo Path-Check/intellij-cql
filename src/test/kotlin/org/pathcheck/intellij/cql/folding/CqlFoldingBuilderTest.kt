@@ -59,4 +59,10 @@ class CqlFoldingBuilderTest : BasePlatformTestCase() {
         // Then
         assertEquals(0, myFixture.editor.foldingModel.allFoldRegions.size)
     }
+
+    @Throws(Exception::class)
+    override fun setUp() {
+        super.setUp()
+        System.setProperty("idea.log.debug.categories", "#org.pathcheck.intellij.cql");
+    }
 }
