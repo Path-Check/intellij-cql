@@ -3,13 +3,9 @@ package org.pathcheck.intellij.cql.reference
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReference
 import com.intellij.testFramework.fixtures.BasePlatformTestCase
-import org.pathcheck.intellij.cql.psi.definitions.LibraryDefinition
 import org.pathcheck.intellij.cql.psi.definitions.LocalIdentifier
 import org.pathcheck.intellij.cql.psi.definitions.ParameterDefinition
 import org.pathcheck.intellij.cql.psi.definitions.QualifiedIdentifier
-import org.pathcheck.intellij.cql.psi.references.IdentifierOrFunctionIdentifier
-import org.pathcheck.intellij.cql.psi.scopes.Alias
-import org.pathcheck.intellij.cql.psi.statements.ExpressionDefinition
 import org.pathcheck.intellij.cql.utils.CaretUtils
 
 

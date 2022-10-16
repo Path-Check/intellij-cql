@@ -1,7 +1,6 @@
 package org.pathcheck.intellij.cql.parser
 
 import com.intellij.testFramework.ParsingTestCase
-import org.pathcheck.intellij.cql.parser.CqlParserDefinition
 import java.io.IOException
 
 abstract class BaseParsingTestCase(subfolder: String) : ParsingTestCase(subfolder, "cql", CqlParserDefinition()) {
