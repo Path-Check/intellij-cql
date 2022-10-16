@@ -7,13 +7,10 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.Library
-import org.pathcheck.intellij.cql.psi.LookupProvider
 import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
 import org.pathcheck.intellij.cql.psi.references.Identifier
 import org.pathcheck.intellij.cql.psi.references.ModelIdentifier
-import org.pathcheck.intellij.cql.utils.LookupHelper
-import org.pathcheck.intellij.cql.utils.cleanText
 
 /** A subtree associated with a query.
  * Its scope is the set of arguments.

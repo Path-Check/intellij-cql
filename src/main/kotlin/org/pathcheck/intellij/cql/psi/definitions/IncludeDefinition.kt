@@ -7,7 +7,6 @@ import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import com.intellij.psi.util.PsiTreeUtil
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import org.hl7.cql.model.NamespaceManager
 import org.hl7.elm.r1.Library
 import org.hl7.elm.r1.VersionedIdentifier
 import org.pathcheck.intellij.cql.elm.GlobalCache

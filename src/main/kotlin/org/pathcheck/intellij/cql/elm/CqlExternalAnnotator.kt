@@ -6,7 +6,6 @@ import com.intellij.lang.annotation.HighlightSeverity
 import com.intellij.openapi.application.ApplicationManager
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiFile
-import org.cqframework.cql.cql2elm.CqlCompiler
 import org.cqframework.cql.cql2elm.CqlCompilerException
 import org.cqframework.cql.elm.tracking.TrackBack
 import org.hl7.elm.r1.Library
