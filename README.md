@@ -60,4 +60,4 @@ Unless required by applicable law or agreed to in writing, software distributed 
 
 ## Contributing
 
-[Issues](https://github.com/Path-Check/healthpassport-provider-reader-app/issues) and [pull requests](https://github.com/Path-Check/healthpassport-provider-reader-app/pulls) are very welcome! :)
+[Issues](https://github.com/Path-Check/intellij-cql/issues) and [pull requests](https://github.com/Path-Check/intellij-cql/pulls) are very welcome! :)
