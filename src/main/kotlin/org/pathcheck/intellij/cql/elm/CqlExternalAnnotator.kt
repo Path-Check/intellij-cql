@@ -11,6 +11,7 @@ import org.cqframework.cql.cql2elm.CqlCompilerException
 import org.cqframework.cql.elm.tracking.TrackBack
 import org.hl7.elm.r1.Library
 import org.pathcheck.intellij.cql.psi.CqlFileRoot
+import org.pathcheck.intellij.cql.utils.CaretUtils
 import java.io.IOException
 
 class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerException>?>() {
@@ -102,17 +103,12 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
         }
     }
 
-    private fun nthIndex(string: String, ch: Char, n: Int): Int {
-        if (n <= 0) return 0
-        return string.length - string.replace("^([^$ch]*$ch){$n}".toRegex(), "").length - 1
-    }
-
     /**
      * converts the CQL Exception TrackBack (line + column, line + column) into a PSI TextRange format (char, char)
      */
     private fun locatorToRange(locator: TrackBack, text: String): TextRange? {
-        val startChar = (nthIndex(text, '\n', locator.startLine-1) + locator.startChar)
-        var endChar = (nthIndex(text, '\n', locator.endLine-1) + locator.endChar + 1)
+        val startChar = CaretUtils.calculateOffset(text, locator.startLine, locator.startChar)
+        var endChar = CaretUtils.calculateOffset(text, locator.endLine, locator.endChar + 1)
 
         if (endChar > text.length) endChar = text.length
 
