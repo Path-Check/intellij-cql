@@ -27,11 +27,10 @@ class ModelCompletionProvider: CompletionProvider<CompletionParameters>() {
             }
 
             dataTypes
-                .filter { it.key.startsWith(prefix, true) }
                 .forEach {
                     result.addElement(
-                        LookupElementBuilder.create(it.key)
-                            .withTypeText(it.value.toLabel(), true)
+                        LookupElementBuilder.create(it.value.toLabel())
+                            .withTypeText(it.key, true)
                             .withIcon(AllIcons.Nodes.Type)
                     )
                 }
