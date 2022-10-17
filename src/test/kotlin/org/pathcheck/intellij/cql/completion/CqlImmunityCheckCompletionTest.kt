@@ -16,15 +16,13 @@ class CqlImmunityCheckCompletionTest: BaseCompletionTestCase() {
             "MedicinalProductIngredient.SpecifiedSubstance.Strength.ReferenceStrength")
     }
 
-    /* These are a different kind of completion
     fun testCompletionAttributeFromModel() {
-        assertCompletionHas( 17, 16, "protocolApplied")
+        assertCompletionHas( 16, 26, "protocolApplied")
     }
 
     fun testCompletionAttributeFromLocalLib() {
-        assertCompletionHas( 17, 61, "protocolApplied")
+        assertCompletionHas( 17, 61, "myDoseLimit", "myDoseLimitMl")
     }
-     */
 
     override fun loadFiles(): List<String> {
         return listOf("ImmunityCheck-1.0.0.cql", "Commons-1.0.0.cql", "Commons-1.0.2.cql")
