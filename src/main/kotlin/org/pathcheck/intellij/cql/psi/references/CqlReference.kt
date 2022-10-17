@@ -1,11 +1,13 @@
 package org.pathcheck.intellij.cql.psi.references
 
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.util.TextRange
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiReferenceBase
 import com.intellij.util.IncorrectOperationException
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.pathcheck.intellij.cql.psi.IdentifierPSINode
+import org.pathcheck.intellij.cql.psi.scopes.QualifiedIdentifierExpression
 import org.pathcheck.intellij.cql.psi.scopes.QualifiedMemberInvocation
 
 /**
@@ -16,11 +18,17 @@ class CqlReference(element: IdentifierPSINode) :
 
     override fun getVariants(): Array<Any> {
         val scope = element.context
+        thisLogger().debug("GetVariants called for element ${element.text} and scope $scope")
+
         if (scope is QualifiedMemberInvocation) {
             return scope.expandLookup().toTypedArray()
         }
 
-        println("Variants not found for scope $scope")
+        if (scope is QualifiedIdentifierExpression) {
+            return scope.expandLookup().toTypedArray()
+        }
+
+        thisLogger().debug("Variant Implementation not found for scope $scope")
 
         return emptyArray()
     }

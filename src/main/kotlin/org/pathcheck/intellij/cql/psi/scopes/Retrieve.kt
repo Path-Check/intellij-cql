@@ -1,12 +1,16 @@
 package org.pathcheck.intellij.cql.psi.scopes
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
+import com.intellij.psi.util.findParentOfType
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.hl7.cql.model.DataType
 import org.hl7.cql.model.ListType
 import org.pathcheck.intellij.cql.psi.HasResultType
+import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
 import org.pathcheck.intellij.cql.psi.expressions.Expression
 import org.pathcheck.intellij.cql.psi.expressions.NamedTypeSpecifier
@@ -40,7 +44,7 @@ class Retrieve(node: ASTNode) : BasePsiNode(node), HasResultType {
         if (innerType != null)
             return ListType(innerType)
 
-        println("Error: innerType was null on Retrieve.getResultType() with nameSpec $nameSpec as ${nameSpec?.text}")
+        thisLogger().error("InnerType was null on Retrieve.getResultType() with nameSpec $nameSpec as ${nameSpec?.text}")
 
         return null
     }
@@ -52,7 +56,7 @@ class ContextIdentifier(node: ASTNode) : BasePsiNode(node) {
     }
 }
 
-class QualifiedIdentifierExpression(node: ASTNode) : BasePsiNode(node), HasResultType, ScopeNode {
+class QualifiedIdentifierExpression(node: ASTNode) : BasePsiNode(node), HasResultType, ScopeNode, ReferenceLookupProvider {
     fun referentialIdentifier(): ReferentialIdentifier? {
         return getRule(ReferentialIdentifier::class.java, 0)
     }
@@ -79,10 +83,21 @@ class QualifiedIdentifierExpression(node: ASTNode) : BasePsiNode(node), HasResul
     }
 
     override fun resolve(element: PsiNamedElement?): PsiElement? {
+        if (element == null) return null
+
         return if (qualifierExpression().isNullOrEmpty()) {
-            // Unqualified Identifier, sends to parent scope.
-            context?.resolve(element)
+            thisLogger().debug("Retrieve Resolve ${element.text}. Unqualified Identifier, sends to parent scope.")
+            return context?.resolve(element)
         } else {
+            val qualifierExpression = element.findParentOfType<QualifierExpression>()
+                ?: return null // should never happen
+
+            // if it is root, sends to parent scope.
+            if (getParentQualifier(qualifierExpression) == null) {
+                thisLogger().debug("Retrieve Resolve ${element.text}. Root Qualifier, sends to parent scope.")
+                return context?.resolve(element)
+            }
+
             // TODO: can't resolve datatypes yet.
             null;
         }
@@ -93,6 +108,10 @@ class QualifiedIdentifierExpression(node: ASTNode) : BasePsiNode(node), HasResul
         val position = children.indexOf(element)
         if (position == 0) return null
         return children[position-1] as QualifierExpression
+    }
+
+    override fun expandLookup(): List<LookupElementBuilder> {
+        return expandLookup(qualifierExpression()?.lastOrNull()?.getResultType())
     }
 }
 
