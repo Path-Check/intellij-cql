@@ -3,8 +3,10 @@ package org.pathcheck.intellij.cql.psi.scopes
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.icons.AllIcons
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
+import com.intellij.psi.util.isAncestor
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.hl7.cql.model.DataType
 import org.pathcheck.intellij.cql.psi.DeclaringIdentifiers
@@ -18,6 +20,7 @@ import org.pathcheck.intellij.cql.psi.expressions.SimpleLiteral
 import org.pathcheck.intellij.cql.psi.references.Identifier
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
+import org.pathcheck.intellij.cql.utils.printParentStack
 
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
@@ -60,29 +63,24 @@ class Query(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifiers,
      * inside this subtree and return it.
      */
     override fun resolve(element: PsiNamedElement): PsiElement? {
-        // only resolves if it comes from a non-definition element of the current node.
-        sourceClause()?.aliasedQuerySource()?.map {
-
-            val exp = it.querySource()?.qualifiedIdentifierExpression()
-
-            val list = exp?.qualifierExpression()?.map {
-                it.referentialIdentifier()?.identifier()?.anyToken()
-            } ?: emptyList()
-
-            list.plus(exp?.referentialIdentifier()?.identifier()?.any()).filterNotNull()
-
-        }?.flatten()?.firstOrNull {
-            it.text == element.text && it.textRange == element.textRange
-        }?.let {
-            return context?.resolve(element)
+        sourceClause()?.aliasedQuerySource()?.forEach {
+            // If it is a QuerySource, the element was defined outside this tree.
+            if (it.querySource().isAncestor(element)) {
+                element.printParentStack()
+                thisLogger().debug("Query Resolve ${element.text}. Part of QuerySource, sending to Parent")
+                return context?.resolve(element)
+            }
         }
 
         // Finds the aliases that were defined under this subtree and checks if the element is one of these aliases.
         visibleIdentifiers().firstOrNull() {
             it.text == element.text
         }?.let {
+            thisLogger().debug("Query Resolve ${element.text} to ${it.parent.parent.parent}/${it.parent.parent}")
             return it.parent
         }
+
+        thisLogger().debug("Query Resolve ${element.text} -> Not part of the Identifying set")
 
         // sends to parent scope.
         return context?.resolve(element)
