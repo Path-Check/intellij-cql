@@ -2,6 +2,7 @@ package org.pathcheck.intellij.cql.psi
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
@@ -13,6 +14,7 @@ import org.pathcheck.intellij.cql.psi.definitions.LibraryDefinition
 import org.pathcheck.intellij.cql.psi.statements.Statement
 
 class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifiers, LookupProvider {
+
     fun libraryDefinition(): LibraryDefinition? {
         return getRule(LibraryDefinition::class.java, 0)
     }
@@ -45,8 +47,11 @@ class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifier
         visibleIdentifiers().firstOrNull() {
             it.text == element.text
         }?.let {
+            thisLogger().debug("Library Resolve ${element.text} to ${it.parent.parent.parent}/${it.parent.parent}")
             return it.parent
         }
+
+        thisLogger().debug("Library Resolve ${element.text} -> Not part of the Identifying set")
 
         return null
     }
@@ -118,7 +123,7 @@ class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifier
 
             explicitInclusions + system
         } catch (e: Exception) {
-            println("ERROR: System model is not ready yet")
+            thisLogger().warn("ERROR: System model is not ready yet")
             emptyList()
         }
     }

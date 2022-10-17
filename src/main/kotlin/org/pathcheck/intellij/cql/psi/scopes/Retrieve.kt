@@ -44,7 +44,7 @@ class Retrieve(node: ASTNode) : BasePsiNode(node), HasResultType {
         if (innerType != null)
             return ListType(innerType)
 
-        thisLogger().error("InnerType was null on Retrieve.getResultType() with nameSpec $nameSpec as ${nameSpec?.text}")
+        thisLogger().warn("InnerType was null on Retrieve.getResultType() with nameSpec $nameSpec as ${nameSpec?.text}")
 
         return null
     }

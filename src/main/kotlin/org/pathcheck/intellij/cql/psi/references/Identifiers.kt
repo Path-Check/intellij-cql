@@ -1,6 +1,7 @@
 package org.pathcheck.intellij.cql.psi.references
 
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import org.cqframework.cql.gen.cqlParser
 import org.hl7.cql.model.DataType
@@ -59,7 +60,7 @@ class ReferentialIdentifier(node: ASTNode) : BasePsiNode(node), HasResultType {
         return if (refDefinition is HasResultType) {
             refDefinition.getResultType()
         } else {
-            println("ERROR: Element $refDefinition doesn't have a return type. Class $this with ${this.text}")
+            thisLogger().warn("Element $refDefinition doesn't have a return type. Class $this with ${this.text}")
             null
         }
     }

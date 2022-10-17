@@ -1,6 +1,7 @@
 package org.pathcheck.intellij.cql.psi.expressions
 
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.diagnostic.thisLogger
 import org.antlr.intellij.adaptor.psi.ANTLRPsiLeafNode
 import org.cqframework.cql.gen.cqlParser
 import org.hl7.cql.model.DataType
@@ -10,7 +11,7 @@ import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
 open class Literal(node: ASTNode) : BasePsiNode(node), HasResultType {
     // This should never happen
     override fun getResultType(): DataType? {
-        println("Calling Result Type in an Object that should not exist: $this")
+        thisLogger().warn("Calling Result Type in an Object that should not exist: $this")
         return null
     }
 }
@@ -130,7 +131,7 @@ class Unit(node: ASTNode) : BasePsiNode(node) {
 open class SimpleLiteral(node: ASTNode) : BasePsiNode(node), HasResultType {
     // This should never happen
     override fun getResultType(): DataType? {
-        println("Calling Result Type in an Object that should not exist: $this")
+        thisLogger().warn("Calling Result Type in an Object that should not exist: $this")
         return null
     }
 }

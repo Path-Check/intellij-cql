@@ -5,6 +5,7 @@ import com.intellij.lang.ParserDefinition
 import com.intellij.lang.PsiBuilder
 import com.intellij.lang.PsiParser
 import com.intellij.lexer.Lexer
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.openapi.project.Project
 import com.intellij.psi.FileViewProvider
 import com.intellij.psi.PsiElement
@@ -357,7 +358,7 @@ class CqlParserDefinition : ParserDefinition {
             "FunctionIdentifier" -> FunctionIdentifier(node)
             "TypeNameIdentifier" -> TypeNameIdentifier(node)
             else -> {
-                println("ERROR: Couldn't instantiate custom Antlr context ${CqlRuleTypes.RULE_NAMES[elType.ruleIndex]}")
+                thisLogger().warn("Couldn't instantiate custom Antlr context ${CqlRuleTypes.RULE_NAMES[elType.ruleIndex]}")
                 ANTLRPsiNode(node)
             }
         }

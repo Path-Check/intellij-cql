@@ -1,6 +1,7 @@
 package org.pathcheck.intellij.cql.psi.expressions
 
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.diagnostic.thisLogger
 import org.hl7.cql.model.DataType
 import org.pathcheck.intellij.cql.psi.HasResultType
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
@@ -10,7 +11,7 @@ import org.pathcheck.intellij.cql.psi.scopes.Function
 open class Invocation(node: ASTNode) : BasePsiNode(node), HasResultType {
     // This should never happen
     override fun getResultType(): DataType? {
-        println("Calling Result Type in an Object that should not exist: $this")
+        thisLogger().warn("Calling Result Type in an Object that should not exist: $this")
         return null
     }
 }

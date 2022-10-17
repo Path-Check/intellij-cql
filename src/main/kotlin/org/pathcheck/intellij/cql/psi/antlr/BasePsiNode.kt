@@ -218,7 +218,7 @@ open class BasePsiNode(node: ASTNode) : ANTLRPsiNode(node) {
             return type.library.exportingLookups()
         }
 
-        thisLogger().error("Couldn't expand qualifier $type with class ${type?.javaClass}")
+        thisLogger().warn("Couldn't expand qualifier $type with class ${type?.javaClass}")
 
         return emptyList()
     }
