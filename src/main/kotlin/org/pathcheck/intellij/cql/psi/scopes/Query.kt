@@ -20,7 +20,6 @@ import org.pathcheck.intellij.cql.psi.expressions.SimpleLiteral
 import org.pathcheck.intellij.cql.psi.references.Identifier
 import org.pathcheck.intellij.cql.utils.LookupHelper
 import org.pathcheck.intellij.cql.utils.cleanText
-import org.pathcheck.intellij.cql.utils.printParentStack
 
 /** A subtree associated with a query.
  * Its scope is the set of arguments.
@@ -66,7 +65,6 @@ class Query(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifiers,
         sourceClause()?.aliasedQuerySource()?.forEach {
             // If it is a QuerySource, the element was defined outside this tree.
             if (it.querySource().isAncestor(element)) {
-                element.printParentStack()
                 thisLogger().debug("Query Resolve ${element.text}. Part of QuerySource, sending to Parent")
                 return context?.resolve(element)
             }
