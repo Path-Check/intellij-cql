@@ -1,6 +1,8 @@
 package org.pathcheck.intellij.cql.psi.antlr
 
+import com.intellij.codeInsight.lookup.LookupElementBuilder
 import com.intellij.lang.ASTNode
+import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.psi.PsiElement
 import com.intellij.psi.impl.source.tree.LeafPsiElement
 import com.intellij.psi.util.findParentOfType
@@ -10,9 +12,9 @@ import org.cqframework.cql.cql2elm.DataTypes
 import org.cqframework.cql.cql2elm.model.ConversionMap
 import org.cqframework.cql.cql2elm.model.Model
 import org.hl7.cql.model.*
-import org.pathcheck.intellij.cql.psi.CqlFileRoot
-import org.pathcheck.intellij.cql.psi.IdentifierPSINode
-import org.pathcheck.intellij.cql.psi.Library
+import org.pathcheck.intellij.cql.psi.*
+import org.pathcheck.intellij.cql.utils.expandLookup
+import org.pathcheck.intellij.cql.utils.exportingLookups
 import java.util.*
 
 open class BasePsiNode(node: ASTNode) : ANTLRPsiNode(node) {
@@ -192,6 +194,33 @@ open class BasePsiNode(node: ASTNode) : ANTLRPsiNode(node) {
         }
 
         return null
+    }
+
+    fun expandLookup(type: DataType?): List<LookupElementBuilder> {
+        if (type == null) return emptyList()
+
+        if (type is ClassType) {
+            return type.expandLookup()
+        }
+        if (type is ListType) {
+            // List demotion
+            if (type.elementType is ClassType) {
+                return (type.elementType as ClassType).expandLookup()
+            }
+        }
+        if (type is ModelType) {
+            return type.model.expandLookup()
+        }
+        if (type is LibraryType) {
+            return type.library.exportingLookups()
+        }
+        if (type is CompiledLibraryType) {
+            return type.library.exportingLookups()
+        }
+
+        thisLogger().error("Couldn't expand qualifier $type with class ${type?.javaClass}")
+
+        return emptyList()
     }
 
 

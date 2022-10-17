@@ -5,16 +5,15 @@ import com.intellij.lang.ASTNode
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
 import org.antlr.intellij.adaptor.psi.ScopeNode
-import org.hl7.cql.model.ClassType
 import org.hl7.cql.model.DataType
-import org.hl7.cql.model.ListType
-import org.pathcheck.intellij.cql.psi.*
+import org.pathcheck.intellij.cql.psi.HasQualifier
+import org.pathcheck.intellij.cql.psi.HasResultType
+import org.pathcheck.intellij.cql.psi.LibraryType
+import org.pathcheck.intellij.cql.psi.ReferenceLookupProvider
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
 import org.pathcheck.intellij.cql.psi.references.IdentifierOrFunctionIdentifier
 import org.pathcheck.intellij.cql.psi.references.ParamList
 import org.pathcheck.intellij.cql.psi.references.ReferentialIdentifier
-import org.pathcheck.intellij.cql.utils.expandLookup
-import org.pathcheck.intellij.cql.utils.exportingLookups
 
 /** A subtree associated with a function definition.
  * Its scope is the set of arguments.
@@ -75,27 +74,7 @@ class QualifiedFunctionInvocation(node: ASTNode) : QualifiedInvocation(node), Sc
     override fun expandLookup(): List<LookupElementBuilder> {
         val typedParent = parent
         if (typedParent is HasQualifier) {
-            val qualifier = typedParent.getQualifier()
-            if (qualifier is ClassType) {
-                return qualifier.expandLookup()
-            }
-            if (qualifier is ListType) {
-                // List demotion
-                if (qualifier.elementType is ClassType) {
-                    return (qualifier.elementType as ClassType).expandLookup()
-                }
-            }
-            if (qualifier is ModelType) {
-                return qualifier.model.expandLookup()
-            }
-            if (qualifier is LibraryType) {
-                return qualifier.library.exportingLookups()
-            }
-            if (qualifier is CompiledLibraryType) {
-                return qualifier.library.exportingLookups()
-            }
-
-            println("ERROR: Couldn't expand qualifier $qualifier with class ${qualifier?.javaClass}")
+            return expandLookup(typedParent.getQualifier())
         }
 
         return emptyList()
@@ -141,27 +120,7 @@ class QualifiedMemberInvocation(node: ASTNode) : QualifiedInvocation(node), Scop
     override fun expandLookup(): List<LookupElementBuilder> {
         val typedParent = parent
         if (typedParent is HasQualifier) {
-            val qualifier = typedParent.getQualifier()
-            if (qualifier is ClassType) {
-                return qualifier.expandLookup()
-            }
-            if (qualifier is ListType) {
-                // List demotion
-                if (qualifier.elementType is ClassType) {
-                    return (qualifier.elementType as ClassType).expandLookup()
-                }
-            }
-            if (qualifier is ModelType) {
-                return qualifier.model.expandLookup()
-            }
-            if (qualifier is LibraryType) {
-                return qualifier.library.exportingLookups()
-            }
-            if (qualifier is CompiledLibraryType) {
-                return qualifier.library.exportingLookups()
-            }
-
-            println("ERROR: Couldn't expand qualifier $qualifier with class ${qualifier?.javaClass}")
+            return expandLookup(typedParent.getQualifier())
         }
 
         return emptyList()
