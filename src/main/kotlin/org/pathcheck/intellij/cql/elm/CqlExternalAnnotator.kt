@@ -57,7 +57,7 @@ class CqlExternalAnnotator : ExternalAnnotator<PsiFile?, List<CqlCompilerExcepti
         val correctName = listOfNotNull(library.identifier.id, library.identifier.version).joinToString("-") + ".cql"
         if (fileName != correctName) {
             val start = text.indexOf(library.identifier.id)
-            var end = start + library.identifier.id.length
+            var end = start + library.identifier.id.length-1
             if (library.identifier.version != null && library.identifier.version.isNotEmpty())
                 end = text.indexOf(library.identifier.version) + library.identifier.version.length
 
