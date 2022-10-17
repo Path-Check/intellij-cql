@@ -1,12 +1,10 @@
 package org.pathcheck.intellij.cql.psi
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder
-import com.intellij.icons.AllIcons
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
-import com.jetbrains.rd.util.firstOrNull
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.cqframework.cql.cql2elm.model.Model
 import org.hl7.cql.model.ClassType
