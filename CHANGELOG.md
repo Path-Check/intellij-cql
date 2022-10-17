@@ -4,8 +4,10 @@
 
 ## [Unreleased]
 
+## [0.1.1]
+Enhanced Model-based code completion
+
 ## [0.1.0]
-Semantic code completion
 
 ## [0.0.6]
 - Contextual Find Usages of a function or variable
