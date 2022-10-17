@@ -35,6 +35,7 @@ class CqlReference(element: IdentifierPSINode) :
 
     override fun resolve(): PsiElement? {
         val scope = element.context as ScopeNode
+        thisLogger().debug("Resolving Reference ${element.text}. Scope found: $scope")
         return scope.resolve(element)
     }
 

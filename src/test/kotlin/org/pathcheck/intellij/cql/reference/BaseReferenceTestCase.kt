@@ -10,12 +10,6 @@ abstract class BaseReferenceTestCase : BasePlatformTestCase() {
     abstract fun loadFiles(): List<String>
     abstract fun testDirectory(): String
 
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
-        System.setProperty("idea.log.debug.categories", "#org.pathcheck.intellij.cql");
-    }
-
     override fun getTestDataPath(): String {
         return testDirectory()
     }

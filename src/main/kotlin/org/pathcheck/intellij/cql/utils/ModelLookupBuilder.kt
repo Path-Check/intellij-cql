@@ -22,7 +22,7 @@ fun Model.expandLookup(): List<LookupElementBuilder> {
                 .withTypeText(type.name, true)
                 .withIcon(AllIcons.Nodes.Type)
         } else {
-            LookupElementBuilder.create(type)
+            LookupElementBuilder.create(type.toLabel())
                 .withTypeText(type.toString(), true)
                 .withIcon(AllIcons.Nodes.Type)
         }

@@ -20,12 +20,6 @@ abstract class BaseParsingTestCase(subfolder: String) : ParsingTestCase(subfolde
         }
     }
 
-    @Throws(Exception::class)
-    override fun setUp() {
-        super.setUp()
-        System.setProperty("idea.log.debug.categories", "#org.pathcheck.intellij.cql");
-    }
-
     /**
      * @return path to test data file directory relative to root of this module.
      */

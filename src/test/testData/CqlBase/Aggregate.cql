@@ -13,4 +13,3 @@ define Factorial:
 define Factorial2:
   One X
     aggregate R starting 1: R * X
-

@@ -11,6 +11,7 @@ import org.antlr.intellij.adaptor.psi.Trees
 import org.pathcheck.intellij.cql.CqlLanguage
 import org.pathcheck.intellij.cql.psi.definitions.QualifiedIdentifier
 import org.pathcheck.intellij.cql.psi.expressions.Invocation
+import org.pathcheck.intellij.cql.psi.expressions.InvocationTerm
 import org.pathcheck.intellij.cql.psi.references.CqlReference
 import org.pathcheck.intellij.cql.psi.references.ReferentialIdentifier
 import org.pathcheck.intellij.cql.psi.scopes.QualifiedIdentifierExpression
@@ -78,6 +79,7 @@ class IdentifierPSINode(type: IElementType?, text: CharSequence?) : ANTLRPsiLeaf
                   || it is QualifiedInvocation
                   || it is QualifiedIdentifierExpression // QuerySource from variable
                   || it is QualifiedIdentifier // LibraryDef, IncludeDef, UsingDef
+                  || it is InvocationTerm
                   || it is ReferentialIdentifier
         }?.let {
             return CqlReference(this)

@@ -45,7 +45,13 @@ class ReferentialIdentifier(node: ASTNode) : BasePsiNode(node), HasResultType {
      * This should not be called if this object is used after a qualifier
      */
     override fun getResultType(): DataType? {
-        var refDefinition = anyToken()?.reference?.resolve()
+        val ref = anyToken()?.reference
+        if (ref == null) {
+            thisLogger().warn("Element ${this.text} doesn't have a reference.")
+            return null
+        }
+
+        var refDefinition = ref.resolve()
 
         // Always returns the Identifier Node, which doesn't have a result type
         while (refDefinition != null && refDefinition !is HasResultType) {

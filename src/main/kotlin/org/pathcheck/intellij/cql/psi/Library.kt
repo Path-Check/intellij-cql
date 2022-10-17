@@ -1,17 +1,22 @@
 package org.pathcheck.intellij.cql.psi
 
 import com.intellij.codeInsight.lookup.LookupElementBuilder
+import com.intellij.icons.AllIcons
 import com.intellij.lang.ASTNode
 import com.intellij.openapi.diagnostic.thisLogger
 import com.intellij.psi.PsiElement
 import com.intellij.psi.PsiNamedElement
+import com.jetbrains.rd.util.firstOrNull
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.cqframework.cql.cql2elm.model.Model
+import org.hl7.cql.model.ClassType
 import org.pathcheck.intellij.cql.elm.GlobalCache
 import org.pathcheck.intellij.cql.psi.antlr.BasePsiNode
 import org.pathcheck.intellij.cql.psi.definitions.Definition
 import org.pathcheck.intellij.cql.psi.definitions.LibraryDefinition
 import org.pathcheck.intellij.cql.psi.statements.Statement
+import org.pathcheck.intellij.cql.utils.DataTypePsiElement
+import org.pathcheck.intellij.cql.utils.takeIndex
 
 class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifiers, LookupProvider {
 
@@ -51,6 +56,25 @@ class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifier
             return it.parent
         }
 
+        // Seachers inside models
+        val matchUsing = definition()?.mapNotNull {
+            it.usingDefinition()
+        }?.forEach {
+            val model = it.getModel()
+            val type = model?.takeIndex()?.values?.filter { type ->
+                if (type is ClassType) {
+                    type.simpleName == element.text
+                } else {
+                    type.toLabel() == element.text
+                }
+            }?.firstOrNull()
+
+            if (type != null && it.qualifiedIdentifier() != null) {
+                thisLogger().debug("Library Resolve ${element.text} to ${model.modelInfo.name}/${type}")
+                return DataTypePsiElement(type, it.qualifiedIdentifier()!!)
+            }
+        }
+
         thisLogger().debug("Library Resolve ${element.text} -> Not part of the Identifying set")
 
         return null
@@ -75,8 +99,7 @@ class Library(node: ASTNode) : BasePsiNode(node), ScopeNode, DeclaringIdentifier
                 listOfNotNull(
                     it.functionDefinition()?.identifierOrFunctionIdentifier()?.identifier()?.any(),
                     it.functionDefinition()?.identifierOrFunctionIdentifier()?.functionIdentifier(),
-                    it.expressionDefinition()?.identifier()?.any(),
-                    it.contextDefinition()?.identifier()?.any()
+                    it.expressionDefinition()?.identifier()?.any()
                 )
             }?.flatten()
         ).flatten()
