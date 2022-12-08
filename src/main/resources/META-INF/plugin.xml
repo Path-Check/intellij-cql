@@ -43,8 +43,8 @@
 
         <lang.namesValidator language="Cql" implementationClass="org.pathcheck.intellij.cql.CqlNamesValidator"/>
 
-        <configurationType
-                implementation="org.pathcheck.intellij.cql.run.CqlRunConfigurationType"/>
+        <!--configurationType
+                implementation="org.pathcheck.intellij.cql.run.CqlRunConfigurationType"/-->
 
     </extensions>
 
