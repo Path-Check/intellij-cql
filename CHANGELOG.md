@@ -4,8 +4,10 @@
 
 ## [Unreleased]
 
+## [0.1.2]
+Upgrading version compatibility to account for new IDEA versions.
+
 ## [0.1.1]
-Enhanced Model-based code completion
 
 ## [0.1.0]
 
