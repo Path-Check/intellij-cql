@@ -23,11 +23,12 @@ class IntervalSelector(node: ASTNode) : BasePsiNode(node), HasResultType {
     }
 
     override fun getResultType(): DataType? {
-        return IntervalType(
-            ensureCompatibleTypes(
-                expression(0)?.getResultType(),
-                expression(1)?.getResultType())
-            )
+        val innerTypes = ensureCompatibleTypes(
+            expression(0)?.getResultType(),
+            expression(1)?.getResultType()
+        ) ?: return null
+
+        return IntervalType(innerTypes)
     }
 }
 
