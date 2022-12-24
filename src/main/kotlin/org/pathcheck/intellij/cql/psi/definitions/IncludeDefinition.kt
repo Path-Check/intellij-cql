@@ -9,6 +9,7 @@ import com.intellij.psi.util.PsiTreeUtil
 import org.antlr.intellij.adaptor.psi.ScopeNode
 import org.hl7.elm.r1.Library
 import org.hl7.elm.r1.VersionedIdentifier
+import org.pathcheck.intellij.cql.elm.DirectoryFinder
 import org.pathcheck.intellij.cql.elm.GlobalCache
 import org.pathcheck.intellij.cql.elm.PsiDirectoryLibrarySourceProvider
 import org.pathcheck.intellij.cql.psi.*
@@ -51,11 +52,12 @@ class IncludeDefinition(node: ASTNode) : BasePsiNode(node), ScopeNode, LookupPro
     }
 
     private fun getLinkedLocalLibrary(): org.pathcheck.intellij.cql.psi.Library? {
-        val file = PsiDirectoryLibrarySourceProvider(containingFile.originalFile.containingDirectory)
-            .getLibrarySourceFile(getVersionIdentifier())
+        DirectoryFinder().findAllConvergingLocations(containingFile).forEach {
+            val file = PsiDirectoryLibrarySourceProvider(it).getLibrarySourceFile(getVersionIdentifier())
 
-        if (file is CqlFileRoot) {
-            return file.library()
+            if (file is CqlFileRoot) {
+                return file.library()
+            }
         }
 
         return null

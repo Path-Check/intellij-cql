@@ -1,6 +1,15 @@
 package org.pathcheck.intellij.cql.elm
 
+import com.intellij.ide.impl.ProjectUtilCore
+import com.intellij.openapi.module.ModuleUtilCore
+import com.intellij.openapi.project.ProjectCoreUtil
+import com.intellij.openapi.project.rootManager
+import com.intellij.openapi.roots.ModuleRootManager
+import com.intellij.openapi.vfs.newvfs.impl.VirtualDirectoryImpl
+import com.intellij.psi.PsiDirectory
 import com.intellij.psi.PsiFile
+import com.intellij.psi.PsiManager
+import com.intellij.psi.util.PsiUtilCore
 import org.cqframework.cql.cql2elm.*
 import org.cqframework.cql.cql2elm.model.CompiledLibrary
 import org.cqframework.cql.cql2elm.model.Model
@@ -22,12 +31,12 @@ object GlobalCache {
         }
     }
 
+    /*
+    Some libraries use ServiceLoader to detect and load implementations. For this to work in a plugin,
+    the context class loader must be set to the plugin's classloader and restored afterwards with the
+    original one around initialization code:
+    */
     fun <T> runSafeClassLoader(runnable: () -> T): T {
-        /*
-            Some libraries use ServiceLoader to detect and load implementations. For this to work in a plugin,
-            the context class loader must be set to the plugin's classloader and restored afterwards with the
-            original one around initialization code:
-         */
         val currentThread = Thread.currentThread()
         val originalClassLoader = currentThread.contextClassLoader
         val pluginClassLoader = this.javaClass.classLoader
@@ -63,7 +72,9 @@ object GlobalCache {
         return runSafeClassLoader {
             // ModelManager and Library Manager must be created in this context to make sure ServiceLoaders are ready
             val libraryManager = AdaptedLibraryManager().apply {
-                librarySourceLoader.registerProvider(PsiDirectoryLibrarySourceProvider(file.originalFile.containingDirectory))
+                DirectoryFinder().findAllConvergingLocations(file).forEach {
+                    librarySourceLoader.registerProvider(PsiDirectoryLibrarySourceProvider(it))
+                }
             }
 
             CqlCompiler(modelManager, libraryManager).apply {
@@ -83,7 +94,7 @@ object GlobalCache {
         ): CompiledLibrary {
 
             try {
-                // if this is an external lib, it might be cached.
+                // if this is an external lib, it might be already loaded by the compiler.
                 // The Global instance doesn't have a PsiDirectoryLibrarySourceProvider and thus
                 // can't find local CQLs
                 return libraryManager.resolveLibrary(libraryIdentifier, options, errors)
