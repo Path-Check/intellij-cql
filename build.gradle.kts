@@ -6,11 +6,11 @@ plugins {
     // Java support
     id("java")
     // Kotlin support
-    id("org.jetbrains.kotlin.jvm") version "1.7.10"
+    id("org.jetbrains.kotlin.jvm") version "1.7.22"
     // Gradle IntelliJ Plugin
-    id("org.jetbrains.intellij") version "1.9.0"
+    id("org.jetbrains.intellij") version "1.11.0"
     // Gradle Changelog Plugin
-    id("org.jetbrains.changelog") version "1.3.1"
+    id("org.jetbrains.changelog") version "2.0.0"
     // Gradle Qodana Plugin
     id("org.jetbrains.qodana") version "0.1.13"
 }
@@ -28,24 +28,35 @@ configurations.all {
 }
 
 dependencies {
-    implementation("info.cqframework:cql:2.2.0")
-    implementation("info.cqframework:model:2.2.0")
-    implementation("info.cqframework:elm:2.2.0")
-    implementation("info.cqframework:cql-to-elm:2.2.0")
-    implementation("info.cqframework:model-jackson:2.2.0")
-    implementation("info.cqframework:elm-jackson:2.2.0")
+    implementation("info.cqframework:cql:2.4.0")
+    implementation("info.cqframework:model:2.4.0")
+    implementation("info.cqframework:elm:2.4.0")
+    implementation("info.cqframework:cql-to-elm:2.4.0")
+    implementation("info.cqframework:model-jackson:2.4.0")
+    implementation("info.cqframework:elm-jackson:2.4.0")
 
-    implementation("info.cqframework:qdm:2.2.0")
-    implementation("info.cqframework:quick:2.2.0")
+    implementation("info.cqframework:qdm:2.4.0")
+    implementation("info.cqframework:quick:2.4.0")
 
-    implementation("org.opencds.cqf.cql:engine:2.1.0")
-    implementation("org.opencds.cqf.cql:engine.jackson:2.1.0")
+    implementation("org.opencds.cqf.cql:engine:2.4.0")
+    implementation("org.opencds.cqf.cql:engine.jackson:2.4.0")
 
-    implementation("org.opencds.cqf.cql:evaluator:2.1.0")
-    implementation("org.opencds.cqf.cql:evaluator.fhir:2.1.0")
-    implementation("org.opencds.cqf.cql:evaluator.builder:2.1.0")
+    implementation("org.opencds.cqf.cql:evaluator:2.4.0")
+    implementation("org.opencds.cqf.cql:evaluator.fhir:2.4.0")
+    implementation("org.opencds.cqf.cql:evaluator.builder:2.4.0")
+
+    // Forces the most recent version of jackson, ignoring what dependencies use.
+    // Remove these lines when HAPI 6.4 becomes available.
+    implementation("com.fasterxml.jackson.core:jackson-annotations:2.14.1")
+    implementation("com.fasterxml.jackson:jackson-bom:2.14.1")
+    implementation("com.fasterxml.jackson.core:jackson-core:2.14.1")
+    implementation("com.fasterxml.jackson.core:jackson-databind:2.14.1")
+    implementation("com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.14.1")
+    implementation("com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.14.1")
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.1")
 
     implementation("org.antlr:antlr4-intellij-adaptor:0.1")
+    implementation("org.jetbrains.kotlin:kotlin-reflect:1.7.21")
 }
 
 // Set the JVM language level used to compile sources and generate files - Java 11 is required since 2020.3
