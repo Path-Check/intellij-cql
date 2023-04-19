@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+## 0.1.4 - 2023-04-19
+Java17 and updates to buildUntil parameter in the IntelliJStore
+
 ## 0.1.3 - 2023-04-18
 Upgrading CQL+Evaluator to 2.7 and 2.6 respectively
 Enabling all IDEA versions
