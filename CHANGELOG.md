@@ -4,6 +4,9 @@
 
 ## Unreleased
 
+## 0.1.5 - 2023-04-19
+Re-adding support for the latest Android Studio
+
 ## 0.1.4 - 2023-04-19
 Java17 and updates to buildUntil parameter in the IntelliJStore
 
